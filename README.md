@@ -29,8 +29,7 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 - [ ]  Dinner function implemented
 - [ ]  Day function implemented
 - [ ]  Open issues closed
-
-
+------------------------------------
 - [ ] **V0.1 release**
 
 ## Tech Stack

@@ -30,7 +30,9 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 - [ ]  Day function implemented
 - [ ]  Open issues closed
 
+
 - [ ] **V0.1 release**
+
 ## Tech Stack
 
 **Client:** Android Browser

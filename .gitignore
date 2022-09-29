@@ -130,4 +130,6 @@ dmypy.json
 
 # PyCharm related
 .idea/
-.idea/misc.xml
+*.idea/
+.idea/*
+

@@ -1,5 +1,4 @@
 from flask import Flask
-
 from src.connection import dbconnector
 
 # create flask app

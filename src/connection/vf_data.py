@@ -1,6 +1,7 @@
 import json
 import requests
 import hashlib
+import logging
 from src import getConfig
 
 
@@ -23,7 +24,7 @@ def test():
 
 
 def login():
-    print('logging user ' + _api_username + ' in...')
+    logging.info('logging user ' + _api_username + ' in...')
     # post to api with username and password and api_token
     url = _api_url + "interface/rest/auth/login"
     auth_secret = input('Enter auth_secret: ')
@@ -34,7 +35,12 @@ def login():
         "appkey": _api_token,
         "auth_secret": auth_secret
     }
-    print(json.dumps(payload, indent=4))
+    logging.debug(json.dumps(payload, indent=4))
     response = requests.post(url, data=json.dumps(payload))
     data = response.json()
     return data
+
+
+def get_vfid(vname, nname):
+    logging.info('getting vfid for ' + vname + ' ' + nname + '...')
+    return 0

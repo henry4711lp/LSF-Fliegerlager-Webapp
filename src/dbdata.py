@@ -1,12 +1,12 @@
 from src.connection import dbconnector, vf_data
 
 
-def get_id_by_vname_and_nname(vname, nname):
+def get_id_by_name(vname, nname):
     sql_statement = "SELECT ID FROM GETR WHERE VNAME = '" + vname + "' AND NNAME = '" + nname + "'"
     return dbconnector.sql(sql_statement)
 
 
-def get_vfid_by_vname_and_nname_from_VF(vname, nname):
+def get_vfid_by_name_from_VF(vname, nname):
     return vf_data.get_vfid(vname, nname)
 
 

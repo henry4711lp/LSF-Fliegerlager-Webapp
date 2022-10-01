@@ -8,7 +8,9 @@ def sql(sql_statement):
                                   host=getConfig.getConfig("db_host"), database=getConfig.getConfig("db_name"),
                                   port=getConfig.getConfig("db_port"),
                                   ssl_disabled=getConfig.getConfig("db_ssl_disabled"))
-    cursor = cnx.cursor() # create cursor
-    cursor.execute(sql_statement) # execute the given sql statement
-    rows = cursor.fetchall() # fetches all rows
-    return rows # returns all rows
+    cursor = cnx.cursor()  # create cursor
+    cursor.execute(sql_statement)  # execute the given sql statement
+    rows = cursor.fetchall()  # fetches all rows
+    cursor.close()  # close cursor
+    cnx.close()  # close connection
+    return rows  # returns all rows

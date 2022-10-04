@@ -8,12 +8,13 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 ## Authors
 
 - [Jan Sellerbeck](https://www.github.com/henry4711lp)
+- [Robin Busch](https://www.github.com/rbn-de)
 
 
 ## Data Privacy
 - No storage of data of people who are not affected
-- "testruns" against the "Vereinsflieger" API only via hardware from [@henry4711lp](https://www.github.com/henry4711lp)
-- No release of API key to anyone other than [@henry4711lp](https://www.github.com/henry4711lp)
+- "testruns" against the "Vereinsflieger" API only via hardware from [Jan Sellerbeck](https://www.github.com/henry4711lp)
+- No release of API key to anyone other than [Jan Sellerbeck](https://www.github.com/henry4711lp)
 - No client side processing of the VF API or the DB
 - No public network connection, separated network area, only accessible with VPN
 

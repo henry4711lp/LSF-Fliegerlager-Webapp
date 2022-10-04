@@ -17,11 +17,19 @@ def register():
 
 @app.route("/home", methods=["POST", "GET"])
 def home():
-    name = ""
     if request.method == "POST":
-        name = request.form["vname"]
+        vname = request.form["vname"]
+        nname = request.form["nname"]
 
-    return f"Hello {name}!"
+    return f"Hello {vname} {nname}!"
+
+
+@app.route("/dbtest", methods=["POST", "GET"])
+def dbtest():
+        vname = "Test"
+        nname = "User"
+        sql_statement = f"SELECT ID FROM NAME WHERE VNAME = '{vname}' AND NNAME = '{nname}'"
+        return dbconnector.sql(sql_statement)
 
 
 if __name__ == '__main__':

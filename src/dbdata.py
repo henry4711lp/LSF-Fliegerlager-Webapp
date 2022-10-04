@@ -2,7 +2,7 @@ from src.connection import dbconnector, vf_data
 
 
 def get_id_by_name(vname, nname):
-    sql_statement = "SELECT ID FROM GETR WHERE VNAME = '" + vname + "' AND NNAME = '" + nname + "'"
+    sql_statement = "SELECT ID FROM NAME WHERE VNAME = '" + vname + "' AND NNAME = '" + nname + "'"
     return dbconnector.sql(sql_statement)
 
 

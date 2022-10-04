@@ -1,4 +1,8 @@
+import json
+
 from flask import Flask, render_template, request
+
+from src import dbdata
 from src.connection import dbconnector
 
 # create flask app
@@ -20,8 +24,8 @@ def home():
     if request.method == "POST":
         vname = request.form["vname"]
         nname = request.form["nname"]
-
-    return f"Hello {vname} {nname}!"
+        ID = json.dumps(dbdata.get_id_by_name(vname, nname))
+    return f"Hello UID {ID}!"
 
 
 @app.route("/dbtest", methods=["POST", "GET"])

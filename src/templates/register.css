@@ -2,10 +2,15 @@
   min-height: 283px;
 }
 
+.u-section-1 .u-text-1 {
+  font-weight: 400;
+  margin: 20px auto 0;
+}
+
 .u-section-1 .u-form-1 {
   height: 403px;
   width: 570px;
-  margin: 21px auto;
+  margin: 20px auto 21px;
 }
 
 .u-section-1 .u-input-1 {

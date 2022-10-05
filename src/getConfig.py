@@ -2,7 +2,7 @@
 import yaml
 
 
-def getConfig(x):
+def get_config(x):
     with open("../config/config.yaml", "r") as file:
         data = yaml.safe_load(file)
     return data.get(x)

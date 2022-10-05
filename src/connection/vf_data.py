@@ -13,10 +13,10 @@ def get_access_token(x):
     return data.get(x)
 
 
-_api_token = getConfig.getConfig("api_token")
-_api_username = getConfig.getConfig("api_username")
-_api_password = getConfig.getConfig("api_password")
-_api_url = getConfig.getConfig("api_url")
+_api_token = getConfig.get_config("api_token")
+_api_username = getConfig.get_config("api_username")
+_api_password = getConfig.get_config("api_password")
+_api_url = getConfig.get_config("api_url")
 
 
 def test():

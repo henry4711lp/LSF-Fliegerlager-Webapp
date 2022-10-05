@@ -26,7 +26,8 @@ def home():
         vname = request.form["vname"]
         nname = request.form["nname"]
         ID = json.dumps(dbdata.get_id_by_name(vname, nname))
-        if ID == "None":
+        logging.debug("ID: " + str(ID))
+        if ID == "[]":
             # add new user to database
             dbdata.set_user_id_by_name(vname, nname)
             ID = dbdata.get_id_by_name(vname, nname)

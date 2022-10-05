@@ -1,3 +1,5 @@
+import logging
+
 from src.connection import dbconnector, vf_data
 
 
@@ -27,4 +29,13 @@ def get_PERSESS_by_ID_and_EID(pid, eid):
 
 def get_PERSGET_by_ID_and_GID(pid, gid):
     sql_statement = "SELECT * FROM PERSGET WHERE ID = '" + pid + "' AND GID = '" + gid + "'"
+    return dbconnector.sql(sql_statement)
+
+
+def set_user_id_by_name(vname, nname):
+    vfid = get_vfid_by_name_from_VF(vname, nname)
+    logging.info("got vfid: " + str(vfid))
+    sql_statement = "INSERT INTO ID VALUES (NULL,"+vfid +")" ## Null is for auto increment of the ID
+    dbconnector.sql(sql_statement)
+    sql_statement = "SELECT (SELECT MAX(ID) FROM ID) "
     return dbconnector.sql(sql_statement)

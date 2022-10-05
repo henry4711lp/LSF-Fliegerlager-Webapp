@@ -1,4 +1,5 @@
 import json
+import logging
 
 from flask import Flask, render_template, request
 
@@ -25,6 +26,14 @@ def home():
         vname = request.form["vname"]
         nname = request.form["nname"]
         ID = json.dumps(dbdata.get_id_by_name(vname, nname))
+        if ID == "None":
+            # add new user to database
+            dbdata.set_user_id_by_name(vname, nname)
+            ID = dbdata.get_id_by_name(vname, nname)
+        else:
+            logging.info("User already exists")
+            logging.info(ID)
+            return render_template("home.html", ID=ID)
     return f"Hello UID {ID}!"
 
 

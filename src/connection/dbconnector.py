@@ -1,3 +1,5 @@
+import logging
+
 import mysql.connector
 from src import getConfig
 
@@ -8,6 +10,7 @@ def sql(sql_statement):
                                   host=getConfig.getConfig("db_host"), database=getConfig.getConfig("db_name"),
                                   port=getConfig.getConfig("db_port"),
                                   ssl_disabled=getConfig.getConfig("db_ssl_disabled"))
+    #logging.INFO("Connected to database")
     cursor = cnx.cursor()  # create cursor
     cursor.execute(sql_statement)  # execute the given sql statement
     rows = cursor.fetchall()  # fetches all rows

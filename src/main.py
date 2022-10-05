@@ -1,14 +1,11 @@
-import http.client
 import json
 import logging
-
-from flask import Flask, render_template, request, make_response, abort
-
+from flask import Flask, render_template, request, make_response
 from src import dbdata
 from src.connection import dbconnector
 
 # create flask app
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 UserID = 0
 
 
@@ -54,6 +51,11 @@ def get_vname_by_id():
     sql_statement = f"SELECT VNAME FROM NAME WHERE ID = {ID}"
     print(json.dumps(dbconnector.sql(sql_statement)))
     return str(json.dumps(dbconnector.sql(sql_statement)))
+
+
+@app.route("/drinkselector")
+def drinkselector():
+    return render_template("drinkselector.html")
 
 
 @app.route("/dbtest")

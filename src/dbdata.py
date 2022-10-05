@@ -47,3 +47,20 @@ def set_user_id_by_name(vname, nname):
     sql_statement = f"INSERT INTO NAME VALUES ({int_id},'{vname}','{nname}')"
     dbconnector.sql(sql_statement)
     return uid
+
+
+# print the sum of all prices of all drinks of a user
+def get_sum_of_drinks_by_id(id):
+    sql_statement = f"SELECT SUM(GPREIS) FROM PERSGET NATURAL JOIN GETR WHERE ID = {id}"
+    return dbconnector.sql(sql_statement)
+
+
+# print the sum of all prices of all meals of a user and make it sql injection safe
+def get_sum_of_meals_by_id(id):
+    sql_statement = f"SELECT SUM(EPREIS) FROM PERSESS NATURAL JOIN ESS WHERE ID = {id}"
+    return dbconnector.sql(sql_statement)
+
+
+def get_sum_of_all_by_id(id):
+    sql_statement = f"SELECT SUM(GPREIS) + SUM(EPREIS) FROM PERSGET NATURAL JOIN GETR NATURAL JOIN PERSESS NATURAL JOIN ESS WHERE ID = {id}"
+    return dbconnector.sql(sql_statement)

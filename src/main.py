@@ -33,8 +33,7 @@ def home():
             # add new user to database
             dbdata.set_user_id_by_name(vname, nname)
         else:
-            logging.info("User already exists")
-            logging.info(ID)
+            logging.info("User already exists with ID: " + str(ID))
         ID = dbdata.get_id_by_name(vname, nname)
         ID = int(json.loads(json.dumps(ID))[0][0])
         resp = make_response(render_template("home.html", ID=ID))

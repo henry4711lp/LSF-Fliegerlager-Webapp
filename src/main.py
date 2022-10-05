@@ -11,6 +11,7 @@ from src.connection import dbconnector
 app = Flask(__name__)
 UserID = 0
 
+
 @app.route('/')
 def index():
     return render_template("start.html")
@@ -21,7 +22,7 @@ def register():
     return render_template("register.html")
 
 
-@app.route("/home", methods=["POST", "GET"])
+@app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML
 def home():
     if request.method == "POST":
         vname = request.form["vname"]
@@ -37,12 +38,16 @@ def home():
         ID = dbdata.get_id_by_name(vname, nname)
         ID = int(json.loads(json.dumps(ID))[0][0])
         resp = make_response(render_template("home.html", ID=ID))
-        resp.set_cookie("UserID", f'{ID}') # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie("UserID", f'{ID}', max_age=<ExpirationTime>))
+        resp.set_cookie("UserID", f'{ID}')
+        # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie(
+        # "UserID", f'{ID}', max_age=<ExpirationTime>))
         return resp
+
 
 @app.route("/get-cookies/UserID")
 def get_cookies_uid():
-    return request.cookies.get("UserID") #returns the UserID cookie
+    return request.cookies.get("UserID")  # returns the UserID cookie
+
 
 @app.route("/get-Vname-by-ID")
 def get_vname_by_id():
@@ -50,6 +55,7 @@ def get_vname_by_id():
     sql_statement = f"SELECT VNAME FROM NAME WHERE ID = {ID}"
     print(json.dumps(dbconnector.sql(sql_statement)))
     return str(json.dumps(dbconnector.sql(sql_statement)))
+
 
 @app.route("/dbtest")
 def dbtest():

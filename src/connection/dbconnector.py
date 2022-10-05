@@ -13,13 +13,15 @@ def sql(sql_statement):
                                   port=getConfig.getConfig("db_port"),
                                   ssl_disabled=getConfig.getConfig("db_ssl_disabled"))
     if cnx.is_connected():
-        logging.INFO("Connected to database")
+        logging.info("Connected to database")
         cursor = cnx.cursor()  # create cursor
         cursor.execute(sql_statement)  # execute the given sql statement
+        logging.info(f"Executed sql statement {sql_statement}")
         rows = cursor.fetchall()  # fetches all rows
+        cnx.commit()  # commit changes
         cursor.close()  # close cursor
         cnx.close()  # close connection
     else:
-        logging.ERROR("Connection to database failed")
+        logging.error("Connection to database failed")
         rows = 0
     return rows  # returns all rows

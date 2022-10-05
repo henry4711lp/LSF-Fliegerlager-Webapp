@@ -35,14 +35,12 @@ def home():
             logging.info("User already exists")
             logging.info(ID)
             return render_template("home.html", ID=ID)
-    return f"Hello UID {ID}!"
+    return render_template("home.html", ID=ID)
 
 
-@app.route("/dbtest", methods=["POST", "GET"])
+@app.route("/dbtest")
 def dbtest():
-        vname = "Test"
-        nname = "User"
-        sql_statement = f"SELECT ID FROM NAME WHERE VNAME = '{vname}' AND NNAME = '{nname}'"
+        sql_statement = f"SELECT MAX(ID) FROM ID "
         return dbconnector.sql(sql_statement)
 
 

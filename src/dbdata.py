@@ -34,16 +34,16 @@ def get_PERSGET_by_ID_and_GID(pid, gid):
 
 
 def set_user_id_by_name(vname, nname):
-    # vfid = get_vfid_by_name_from_VF(vname, nname)
-    # #vfid = str(json.dumps(vfid))
-    # print(vfid)
-    # logging.info("got vfid: " + str(vfid))
-    # sql_statement = f"INSERT INTO ID VALUES (NULL, {vfid})" ## Null is for auto increment of the ID
-    # dbconnector.sql(sql_statement)
-    # sql_statement = "SELECT (SELECT MAX(ID) FROM ID) "
-    # ID = dbconnector.sql(sql_statement)
-    # ID = str(json.dumps(ID)[0])
-    # logging.info("got ID: " + str(ID))
-    # sql_statement = f"INSERT INTO NAME VALUES ({ID}, {vname},{nname})"
-    # return dbconnector.sql(sql_statement)
-    return dbconnector.sql("INSERT INTO ID VALUES (NULL, 123")
+    vfid = get_vfid_by_name_from_VF(vname, nname)
+    logging.info("got vfid: " + str(vfid))
+    sql_statement = f"INSERT INTO ID VALUES (NULL, {vfid})" ## Null is for auto increment of the ID
+    dbconnector.sql(sql_statement)
+    sql_statement = "SELECT MAX(ID) FROM ID "
+    ID = dbconnector.sql(sql_statement)
+    intID = int(json.loads(json.dumps(ID))[0][0])
+    intID = intID
+    logging.info(f"got ID: {intID}")
+    sql_statement = f"INSERT INTO NAME VALUES ({intID},'{vname}','{nname}')"
+    dbconnector.sql(sql_statement)
+    return ID
+

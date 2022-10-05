@@ -53,8 +53,8 @@ def get_vname_by_id():
     return str(json.dumps(dbconnector.sql(sql_statement)))
 
 
-@app.route("/drinkselector")
-def drinkselector():
+@app.route("/drinkselector") #TODO: Display Prices in HTML
+def drinkselector(): #TODO: Make HTML Buttons and counter work
     return render_template("drinkselector.html")
 
 

@@ -55,7 +55,20 @@ def get_vname_by_id():
 
 @app.route("/drinkselector") #TODO: Display Prices in HTML
 def drinkselector(): #TODO: Make HTML Buttons and counter work
-    return render_template("drinkselector.html")
+    water_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Wasser'")[0][0]
+    water_price = '{:,.2f} €'.format(water_data).replace(".", ",")
+
+    beer_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Bier'")[0][0]
+    beer_price = '{:,.2f} €'.format(beer_data).replace(".", ",")
+
+    soft_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Softdrink'")[0][0]
+    soft_price = '{:,.2f} €'.format(soft_data).replace(".", ",")
+
+    icetea_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Eistee'")[0][0]
+    icetea_price = '{:,.2f} €'.format(icetea_data).replace(".", ",")
+
+    return render_template("drinkselector.html", beer_price=beer_price, water_price=water_price,
+                           icetea_price=icetea_price, soft_price=soft_price)
 
 
 @app.route("/dbtest")

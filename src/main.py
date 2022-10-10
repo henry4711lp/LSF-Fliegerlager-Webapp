@@ -1,6 +1,7 @@
 import json
 import logging
 from flask import Flask, render_template, request, make_response
+from datetime import date
 from src import dbdata
 from src.connection import dbconnector
 
@@ -33,7 +34,10 @@ def home():
             logging.info("User already exists with ID: " + str(ID))
         ID = dbdata.get_id_by_name(vname, nname)
         ID = int(json.loads(json.dumps(ID))[0][0])
-        resp = make_response(render_template("home.html", ID=ID))
+
+        today = date.today().strftime("%d.%m.%Y")
+
+        resp = make_response(render_template("home.html", ID=ID, date=today))
         resp.set_cookie("UserID", f'{ID}')
         # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie(
         # "UserID", f'{ID}', max_age=<ExpirationTime>))

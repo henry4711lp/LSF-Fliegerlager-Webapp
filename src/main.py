@@ -45,6 +45,10 @@ def home():
         return resp
 
 
+@app.route("/bill")
+def bill():
+    return render_template("bill.html")
+
 @app.route("/get-cookies/UserID")
 def get_cookies_uid():
     return request.cookies.get("UserID")  # returns the UserID cookie

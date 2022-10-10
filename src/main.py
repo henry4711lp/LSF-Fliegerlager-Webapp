@@ -2,7 +2,7 @@ import json
 import logging
 from flask import Flask, render_template, request, make_response
 from datetime import date
-from src import dbdata
+from src import dbdata, tablegenerator
 from src.connection import dbconnector
 
 # create flask app
@@ -47,10 +47,12 @@ def home():
 
 @app.route("/bill")
 def bill():
-    return render_template("bill.html")
+    return render_template("bill.html", sum_drinks=dbdata.get_sum_of_drinks_by_id(get_cookies_uid()), table=tablegenerator.get_table(dbdata.get_all_edat_by_id(get_cookies_uid())))
+
 
 @app.route("/get-cookies/UserID")
 def get_cookies_uid():
+    logging.debug("UserID: " + request.cookies.get("UserID"))
     return request.cookies.get("UserID")  # returns the UserID cookie
 
 
@@ -58,12 +60,12 @@ def get_cookies_uid():
 def get_vname_by_id():
     ID = request.cookies.get("UserID")
     sql_statement = f"SELECT VNAME FROM NAME WHERE ID = {ID}"
-    print(json.dumps(dbconnector.sql(sql_statement)))
+    logging.debug(json.dumps(dbconnector.sql(sql_statement)))
     return str(json.dumps(dbconnector.sql(sql_statement)))
 
 
-@app.route("/drinkselector") #TODO: Display Prices in HTML
-def drinkselector(): #TODO: Make HTML Buttons and counter work
+@app.route("/drinkselector")  # TODO: Display Prices in HTML
+def drinkselector():  # TODO: Make HTML Buttons and counter work
     water_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Wasser'")[0][0]
     water_price = '{:,.2f} €'.format(water_data).replace(".", ",")
 

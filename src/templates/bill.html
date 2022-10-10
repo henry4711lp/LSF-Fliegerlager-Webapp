@@ -51,7 +51,7 @@
                 <div class="u-container-layout u-container-layout-2">
                   <h5 class="u-text u-text-5">Getränke&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/931949.png')}}" alt=""></span>
                   </h5>
-                  <h3 class="u-text u-text-6">##SUMME##</h3>
+                  <h3 class="u-text u-text-6">{{sum_drinks}}</h3>
                   <p class="u-text u-text-7">##SUMME_BEER##<br> ##SUMME_WASSER##<br>##SUMME_EISTEE##<br>##SUMME_SOFTDRINK##<br>
                   </p>
                 </div>
@@ -61,7 +61,13 @@
                   <h5 class="u-text u-text-8">Essen&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/263740.png')}}" alt=""></span>
                   </h5>
                   <h3 class="u-text u-text-9">##SUMME##</h3>
-                  <p class="u-text u-text-10">##Alle_Tage##</p>
+                  <p class="u-text u-text-10" ><table>
+    <td>
+       <div class="table output" style="height:150px;width:220px; text-align: left; overflow:auto;">
+         {{table|safe}}
+       </div>
+    </td>
+</table></p>
                 </div>
               </div>
               <div class="u-align-center u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-container-style u-layout-cell u-right-cell u-shape-rectangle u-size-15 u-size-30-md u-layout-cell-4">

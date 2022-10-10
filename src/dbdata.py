@@ -25,6 +25,11 @@ def get_gpreis_by_gid(gid):
     return dbconnector.sql(sql_statement)
 
 
+def get_all_gpreis():
+    sql_statement = f"SELECT GPREIS FROM GETR;"
+    return dbconnector.sql(sql_statement)
+
+
 def get_persess_by_id_and_eid(pid, eid):
     sql_statement = "SELECT * FROM PERSESS WHERE ID = '" + pid + "' AND EID = '" + eid + "'"
     return dbconnector.sql(sql_statement)
@@ -50,17 +55,39 @@ def set_user_id_by_name(vname, nname):
 
 
 # print the sum of all prices of all drinks of a user
-def get_sum_of_drinks_by_id(id):
-    sql_statement = f"SELECT SUM(GPREIS) FROM PERSGET NATURAL JOIN GETR WHERE ID = {id}"
-    return dbconnector.sql(sql_statement)
+def get_sum_of_drinks_by_id(uid):
+    sql_statement = f"SELECT GID,CT FROM PERSGET NATURAL JOIN GETR WHERE ID = {uid}"
+    count = json.loads(json.dumps(dbconnector.sql(sql_statement)))
+    full_price = 0
+    price = json.loads(json.dumps(get_all_gpreis()))
+    logging.debug(f"price: {price}")
+    logging.debug(f"count: {count}")
+    for i in range(0, len(count)):
+        gid = count[i][0]
+        counter = count[i][1]
+        thisprice = price[i][0]
+        logging.debug(f"Price of {gid} is {thisprice} and count is {counter}")
+        cost_of_drink = thisprice * counter
+        logging.debug (f" cost of drink  {cost_of_drink}")
+        full_price += cost_of_drink
+        logging.debug(f"Momentary full price  {full_price}")
+    logging.debug(full_price)
+    full_price = full_price.__format__('0.2f')
+    full_price = full_price.replace(".", ",")
+    return f"{full_price} €"
 
 
 # print the sum of all prices of all meals of a user and make it sql injection safe
-def get_sum_of_meals_by_id(id):
-    sql_statement = f"SELECT SUM(EPREIS) FROM PERSESS NATURAL JOIN ESS WHERE ID = {id}"
+def get_sum_of_meals_by_id(uid):
+    sql_statement = f"SELECT SUM(EPREIS) FROM PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
     return dbconnector.sql(sql_statement)
 
 
-def get_sum_of_all_by_id(id):
-    sql_statement = f"SELECT SUM(GPREIS) + SUM(EPREIS) FROM PERSGET NATURAL JOIN GETR NATURAL JOIN PERSESS NATURAL JOIN ESS WHERE ID = {id}"
+def get_sum_of_all_by_id(uid):
+    sql_statement = f"SELECT SUM(GPREIS) + SUM(EPREIS) FROM PERSGET NATURAL JOIN GETR NATURAL JOIN PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
+    return dbconnector.sql(sql_statement)
+
+
+def get_all_edat_by_id(uid):
+    sql_statement = f"SELECT ESS.EDAT, PERSESS.CT FROM PERSESS INNER JOIN Strichliste.ESS ON PERSESS.EID = ESS.EID WHERE ID = {uid};"
     return dbconnector.sql(sql_statement)

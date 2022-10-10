@@ -2,7 +2,7 @@ import json
 import logging
 from flask import Flask, render_template, request, make_response
 from datetime import date
-from src import dbdata, tablegenerator
+from src import dbdata, tablegenerator, formatprices
 from src.connection import dbconnector
 
 # create flask app
@@ -47,11 +47,25 @@ def home():
 
 @app.route("/bill")
 def bill():
-    return render_template("bill.html", sum_drinks=dbdata.get_sum_of_drinks_by_id(get_cookies_uid()), table=tablegenerator.get_table(dbdata.get_all_edat_by_id(get_cookies_uid())))
+    uid = get_uid_from_cookie()
+    nname = dbdata.get_nname_by_id(uid)
+    vname = dbdata.get_vname_by_id(uid)
+    sumbeer = dbdata.get_sum_of_drink_by_id_and_gid(uid, 1)
+    sumwater = dbdata.get_sum_of_drink_by_id_and_gid(uid, 2)
+    sumeistee = dbdata.get_sum_of_drink_by_id_and_gid(uid, 3)
+    sumsoft = dbdata.get_sum_of_drink_by_id_and_gid(uid, 4)
+    sumdrinks = formatprices.format_prices(dbdata.get_sum_of_drinks_by_id(uid))
+    summeals = formatprices.format_prices(dbdata.get_sum_of_meals_by_id(uid))
+    table = tablegenerator.get_table(dbdata.get_all_edat_by_id(uid))
+    full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid)
+    full_price = formatprices.format_prices(full_price)
+    return render_template("bill.html", nname=nname, vname=vname, sumbeer=sumbeer, sumwater=sumwater,
+                           sumeistee=sumeistee, sumsoft=sumsoft, sum_drinks=sumdrinks, summeals=summeals,
+                           full_price=full_price, table=table)
 
 
 @app.route("/get-cookies/UserID")
-def get_cookies_uid():
+def get_uid_from_cookie():
     logging.debug("UserID: " + request.cookies.get("UserID"))
     return request.cookies.get("UserID")  # returns the UserID cookie
 
@@ -67,16 +81,16 @@ def get_vname_by_id():
 @app.route("/drinkselector")  # TODO: Display Prices in HTML
 def drinkselector():  # TODO: Make HTML Buttons and counter work
     water_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Wasser'")[0][0]
-    water_price = '{:,.2f} €'.format(water_data).replace(".", ",")
+    water_price = formatprices.format_prices(water_data)
 
     beer_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Bier'")[0][0]
-    beer_price = '{:,.2f} €'.format(beer_data).replace(".", ",")
+    beer_price = formatprices.format_prices(beer_data)
 
     soft_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Softdrink'")[0][0]
-    soft_price = '{:,.2f} €'.format(soft_data).replace(".", ",")
+    soft_price = formatprices.format_prices(soft_data)
 
     icetea_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Eistee'")[0][0]
-    icetea_price = '{:,.2f} €'.format(icetea_data).replace(".", ",")
+    icetea_price = formatprices.format_prices(icetea_data)
 
     return render_template("drinkselector.html", beer_price=beer_price, water_price=water_price,
                            icetea_price=icetea_price, soft_price=soft_price)

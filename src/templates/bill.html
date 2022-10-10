@@ -33,7 +33,7 @@
       </div></header>
     <section class="u-align-center u-clearfix u-section-1" id="sec-1e5d">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <h2 class="u-text u-text-default u-text-1">Rechnung&nbsp;&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/2806486.png')}}" alt=""></span>
+        <h2 class="u-text u-text-default u-text-1"><span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/2806486.png')}}" alt=""></span>&nbsp;&nbsp;Rechnung für {{vname}} {{nname}}&nbsp;&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/2806486.png')}}" alt=""></span>
         </h2>
         <div class="u-clearfix u-expanded-width u-gutter-20 u-layout-wrap u-layout-wrap-1">
           <div class="u-layout">
@@ -52,7 +52,7 @@
                   <h5 class="u-text u-text-5">Getränke&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/931949.png')}}" alt=""></span>
                   </h5>
                   <h3 class="u-text u-text-6">{{sum_drinks}}</h3>
-                  <p class="u-text u-text-7">##SUMME_BEER##<br> ##SUMME_WASSER##<br>##SUMME_EISTEE##<br>##SUMME_SOFTDRINK##<br>
+                  <p class="u-text u-text-7">Summen: <br> Bier: {{sumbeer}}<br> Wasser: {{sumwater}}<br>Eistee: {{sumeistee}}<br>Softdrinks: {{sumsoft}}<br>
                   </p>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                 <div class="u-container-layout u-container-layout-3">
                   <h5 class="u-text u-text-8">Essen&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/263740.png')}}" alt=""></span>
                   </h5>
-                  <h3 class="u-text u-text-9">##SUMME##</h3>
+                  <h3 class="u-text u-text-9">{{summeals}}</h3>
                   <p class="u-text u-text-10" ><table>
     <td>
        <div class="table output" style="height:150px;width:220px; text-align: left; overflow:auto;">
@@ -82,7 +82,7 @@
             </div>
           </div>
         </div>
-        <h3 class="u-text u-text-default u-text-14">Gesamtbetrag: ##GESAMTBETRAG##&nbsp;&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/1303146.png')}}" alt=""></span>
+        <h3 class="u-text u-text-default u-text-14">Gesamtbetrag: {{full_price}}&nbsp;&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/1303146.png')}}" alt=""></span>
         </h3>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import json
 import logging
 
+from src import formatprices
 from src.connection import dbconnector, vf_data
 
 logging.basicConfig(level=logging.DEBUG)
@@ -54,6 +55,14 @@ def set_user_id_by_name(vname, nname):
     return uid
 
 
+def get_sum_of_drink_by_id_and_gid(uid, gid):
+    sql_statement = f"SELECT GPREIS*CT FROM PERSGET NATURAL JOIN GETR WHERE ID = {uid} AND GID = {gid}"
+    value = dbconnector.sql(sql_statement)
+    value = json.loads(json.dumps(value))
+    value = value[0][0]
+    return formatprices.format_prices(value)
+
+
 # print the sum of all prices of all drinks of a user
 def get_sum_of_drinks_by_id(uid):
     sql_statement = f"SELECT GID,CT FROM PERSGET NATURAL JOIN GETR WHERE ID = {uid}"
@@ -68,19 +77,24 @@ def get_sum_of_drinks_by_id(uid):
         thisprice = price[i][0]
         logging.debug(f"Price of {gid} is {thisprice} and count is {counter}")
         cost_of_drink = thisprice * counter
-        logging.debug (f" cost of drink  {cost_of_drink}")
+        logging.debug(f" cost of drink  {cost_of_drink}")
         full_price += cost_of_drink
         logging.debug(f"Momentary full price  {full_price}")
     logging.debug(full_price)
-    full_price = full_price.__format__('0.2f')
-    full_price = full_price.replace(".", ",")
-    return f"{full_price} €"
+    return full_price
 
 
 # print the sum of all prices of all meals of a user and make it sql injection safe
 def get_sum_of_meals_by_id(uid):
-    sql_statement = f"SELECT SUM(EPREIS) FROM PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
-    return dbconnector.sql(sql_statement)
+    sql_statement = f"SELECT CT*EPREIS FROM PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
+    value = dbconnector.sql(sql_statement)
+    value = json.loads(json.dumps(value))
+    logging.debug(f"Preis pro Tag: {value}")
+    summe = 0
+    for i in range(0, len(value)):
+        summe += value[i][0]
+        logging.debug(f"Zwischensumme: {summe}")
+    return summe
 
 
 def get_sum_of_all_by_id(uid):
@@ -91,3 +105,19 @@ def get_sum_of_all_by_id(uid):
 def get_all_edat_by_id(uid):
     sql_statement = f"SELECT ESS.EDAT, PERSESS.CT FROM PERSESS INNER JOIN Strichliste.ESS ON PERSESS.EID = ESS.EID WHERE ID = {uid};"
     return dbconnector.sql(sql_statement)
+
+
+def get_vname_by_id(uid):
+    sql_statement = f"SELECT VNAME FROM NAME WHERE ID = {uid}"
+    vname = dbconnector.sql(sql_statement)
+    vname = json.loads(json.dumps(vname))
+    vname = vname[0][0]
+    return vname
+
+
+def get_nname_by_id(uid):
+    sql_statement = f"SELECT NNAME FROM NAME WHERE ID = {uid}"
+    nname = dbconnector.sql(sql_statement)
+    nname = json.loads(json.dumps(nname))
+    nname = nname[0][0]
+    return nname

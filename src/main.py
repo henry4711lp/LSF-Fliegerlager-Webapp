@@ -59,10 +59,11 @@ def bill():
     table = tablegenerator.get_table(dbdata.get_all_edat_by_id(uid))
     full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid)
     full_price = formatprices.format_prices(full_price)
-    staycost = formatprices.format_prices(0)  # placeholder
+    staycost = formatprices.format_prices(dbdata.get_staycost_by_id(uid))
     startdate = date.fromisocalendar(2022, 23, 5).strftime("%d.%m.%Y")  # placeholder
     enddate = date.fromisocalendar(2022, 25, 3).strftime("%d.%m.%Y")  # placeholder
     flycost = formatprices.format_prices(0)  # placeholder
+
     return render_template("bill.html", nname=nname, vname=vname, sumbeer=sumbeer, sumwater=sumwater,
                            sumeistee=sumeistee, sumsoft=sumsoft, sum_drinks=sumdrinks, summeals=summeals,
                            full_price=full_price, staycost=staycost, startdate=startdate, enddate=enddate,

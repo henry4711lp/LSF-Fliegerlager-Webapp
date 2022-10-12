@@ -1,7 +1,7 @@
 import json
 import logging
 
-from src import formatprices
+from src import formatprices, getConfig
 from src.connection import dbconnector, vf_data
 
 logging.basicConfig(level=logging.DEBUG)
@@ -125,3 +125,20 @@ def get_nname_by_id(uid):
     nname = json.loads(json.dumps(nname))
     nname = nname[0][0]
     return nname
+
+
+def get_stay_start_end_by_id(uid):
+    sql_statement = f"SELECT STAYDATE_START, STAYDATE_END FROM STAY WHERE ID = {uid}"
+    return dbconnector.sql(sql_statement)
+
+
+def get_staycost_by_id(uid):
+    sql_statement = f"SELECT CTR FROM STAY WHERE ID = {uid}"
+    counter = dbconnector.sql(sql_statement)
+    counter = json.loads(json.dumps(counter))
+    counter = counter[0][0]
+    logging.debug(f"Staycounter: {counter}")
+    cost = getConfig.get_config("stay_cost")
+    logging.debug(f"Staycost: {cost}")
+    fullcost = cost * counter
+    return fullcost

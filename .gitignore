@@ -129,10 +129,6 @@ dmypy.json
 .pyre/
 
 # PyCharm related
-.idea/
-*.idea/
-.idea/*
-*.idea/*
 /.idea
 
 config/config.yaml

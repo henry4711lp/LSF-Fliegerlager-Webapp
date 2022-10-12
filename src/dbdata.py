@@ -107,7 +107,7 @@ def get_sum_of_all_by_id(uid):
 
 
 def get_all_edat_by_id(uid):
-    sql_statement = f"SELECT ESS.EDAT, PERSESS.CT FROM PERSESS INNER JOIN Strichliste.ESS ON PERSESS.EID = ESS.EID WHERE ID = {uid};"
+    sql_statement = f'SELECT DATE_FORMAT(ESS.EDAT, "%d.%m.%Y"), PERSESS.CT FROM PERSESS INNER JOIN Strichliste.ESS ON PERSESS.EID = ESS.EID WHERE ID = {uid};'
     return dbconnector.sql(sql_statement)
 
 

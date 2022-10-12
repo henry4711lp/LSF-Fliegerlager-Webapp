@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, make_response
 from datetime import date
 from src import dbdata, tablegenerator, formatprices
 from src.connection import dbconnector
+from src.webwork import signup_in
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')
@@ -23,26 +24,9 @@ def register():
 @app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML
 def home():
     if request.method == "POST":
-        vname = request.form["vname"]
-        nname = request.form["nname"]
-        ID = json.dumps(dbdata.get_id_by_name(vname, nname))
-        logging.debug("ID: " + str(ID))
-        if ID == "[]":
-            # add new user to database
-            dbdata.set_user_id_by_name(vname, nname)
-        else:
-            logging.info("User already exists with ID: " + str(ID))
-        ID = dbdata.get_id_by_name(vname, nname)
-        ID = int(json.loads(json.dumps(ID))[0][0])
-
-        today = date.today().strftime("%d.%m.%Y")
-        display_ID = str(ID)
-
-        resp = make_response(render_template("home.html", ID=ID, date=today, display_name=vname, display_ID=display_ID))
-        resp.set_cookie("UserID", f'{ID}')
-        # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie(
-        # "UserID", f'{ID}', max_age=<ExpirationTime>))
-        return resp
+        return signup_in(request)
+    else:
+        return 0
 
 
 @app.route("/bill")

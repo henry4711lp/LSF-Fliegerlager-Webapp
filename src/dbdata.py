@@ -140,5 +140,15 @@ def get_staycost_by_id(uid):
     logging.debug(f"Staycounter: {counter}")
     cost = getConfig.get_config("stay_cost")
     logging.debug(f"Staycost: {cost}")
-    fullcost = cost * counter
+    fullcost = float(cost) * counter
     return fullcost
+
+
+def set_stay_counter(uid, counter):
+    sql_statement = f"UPDATE STAY SET CTR = {counter} WHERE ID = {uid}"
+    dbconnector.sql(sql_statement)
+
+
+def set_stay_start_end(uid, start, end):
+    sql_statement = f"UPDATE STAY SET STAYDATE_START = '{start}', STAYDATE_END = '{end}' WHERE ID = {uid}"
+    dbconnector.sql(sql_statement)

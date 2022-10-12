@@ -12,13 +12,12 @@ UserID = 0
 
 @app.route('/')
 def index():
-    # return render_template("start.html")
+    return redirect(url_for('register'))
+
+
+@app.route('/register')
+def register():
     return render_template("register.html")
-
-
-# @app.route('/register')
-# def register():
-#     return render_template("register.html")
 
 
 @app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML

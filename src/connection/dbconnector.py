@@ -21,6 +21,7 @@ def sql(sql_statement):
         cnx.commit()  # commit changes
         cursor.close()  # close cursor
         cnx.close()  # close connection
+        logging.info("Closed connection to database")
     else:
         logging.error("Connection to database failed")
         rows = 0

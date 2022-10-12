@@ -41,20 +41,6 @@ def get_persget_by_id_and_gid(pid, gid):
     return dbconnector.sql(sql_statement)
 
 
-def set_user_id_by_name(vname, nname):
-    vfid = get_vfid_by_name_from_vf(vname, nname)
-    logging.info("got vfid: " + str(vfid))
-    sql_statement = f"INSERT INTO ID VALUES (NULL, {vfid})"  ## Null is for auto increment of the ID
-    dbconnector.sql(sql_statement)
-    sql_statement = "SELECT MAX(ID) FROM ID "
-    uid = dbconnector.sql(sql_statement)
-    int_id = int(json.loads(json.dumps(uid))[0][0])
-    logging.info(f"got ID: {int_id}")
-    sql_statement = f"INSERT INTO NAME VALUES ({int_id},'{vname}','{nname}')"
-    dbconnector.sql(sql_statement)
-    return uid
-
-
 def get_sum_of_drink_by_id_and_gid(uid, gid):
     sql_statement = f"SELECT GPREIS*CT FROM PERSGET NATURAL JOIN GETR WHERE ID = {uid} AND GID = {gid}"
     value = dbconnector.sql(sql_statement)
@@ -152,3 +138,17 @@ def set_stay_counter(uid, counter):
 def set_stay_start_end(uid, start, end):
     sql_statement = f"UPDATE STAY SET STAYDATE_START = '{start}', STAYDATE_END = '{end}' WHERE ID = {uid}"
     dbconnector.sql(sql_statement)
+
+
+def set_user_id_by_name(vname, nname):
+    vfid = get_vfid_by_name_from_vf(vname, nname)
+    logging.info("got vfid: " + str(vfid))
+    sql_statement = f"INSERT INTO ID VALUES (NULL, {vfid})"  ## Null is for auto increment of the ID
+    dbconnector.sql(sql_statement)
+    sql_statement = "SELECT MAX(ID) FROM ID "
+    uid = dbconnector.sql(sql_statement)
+    int_id = int(json.loads(json.dumps(uid))[0][0])
+    logging.info(f"got ID: {int_id}")
+    sql_statement = f"INSERT INTO NAME VALUES ({int_id},'{vname}','{nname}')"
+    dbconnector.sql(sql_statement)
+    return uid

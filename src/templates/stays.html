@@ -34,25 +34,23 @@
       </div></header>
     <section class="u-clearfix u-section-1" id="sec-9222">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <h2 class="u-align-center u-custom-font u-font-raleway u-subtitle u-text u-text-1">Übernachtungen&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/3009905.png')}}" alt=""></span>
+        <h2 class="u-align-center u-custom-font u-font-raleway u-subtitle u-text u-text-1">Übernachtungen für {{vname}} {{nname}}&nbsp;<span class="u-file-icon u-icon"><img src="{{ url_for('static',filename='images/3009905.png')}}" alt=""></span>
         </h2>
-        <p class="u-text u-text-2">&nbsp; Bisher gebuchte Tage:&nbsp; #####TAGE####</p>
+        <p class="u-text u-text-2">&nbsp; Bisher gebuchte Tage:&nbsp; {{counter}}</p>
         <div class="u-expanded-width u-form u-form-1">
-          <form action="stays" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
+
+          <form  action="/home" method="post" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;" redirect="true">
             <div class="u-form-date u-form-group u-form-group-1">
               <label for="date-45cb" class="u-label">Ankunft</label>
-              <input type="date" placeholder="MM/DD/YYYY" id="date-45cb" name="arrival" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              <input type="date" value="{{start}}" id="date-45cb" name="arrival" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-date u-form-group u-form-group-2">
               <label for="date-dcec" class="u-label">Abfahrt</label>
-              <input type="date" placeholder="MM/DD/YYYY" id="date-dcec" name="departure" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              <input type="date" value="{{ end }}" id="date-dcec" name="departure" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-align-center u-form-group u-form-submit">
-              <input type="submit" value="absenden" class="u-btn u-btn-submit u-button-style">
+              <input type="submit" value="absenden" class="u-btn u-btn-round u-btn-submit u-button-style u-radius-28">
             </div>
-            <div class="u-form-send-message u-form-send-success"> Vielen Dank! Ihre Nachricht wurde gesendet. </div>
-            <div class="u-form-send-error u-form-send-message"> Ihre Nachricht konnte nicht gesendet werden. Bitte beheben Sie den Fehler und versuchen Sie es erneut. </div>
-            <input type="hidden" value="" name="recaptchaResponse">
           </form>
         </div>
       </div>

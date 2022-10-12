@@ -1,10 +1,9 @@
 import json
 import logging
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, redirect, url_for
 from datetime import date
-from src import dbdata, tablegenerator, formatprices
+from src import dbdata, tablegenerator, formatprices, webwork
 from src.connection import dbconnector
-from src.webwork import signup_in
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')
@@ -24,34 +23,30 @@ def register():
 @app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML
 def home():
     if request.method == "POST":
-        return signup_in(request)
-    else:
-        return 0
+        if '/register' in request.referrer:
+            logging.debug("Post from login")
+            return webwork.signup_in(request)
+        elif '/stays' in request.referrer:
+            logging.debug("Post from stays")
+            webwork.stay(request)
+            return redirect(url_for('home'))
+
+    return render_template("error.html")
+
+
+@app.route("/stays")
+def stays():
+    uid = get_uid_from_cookie()
+    vname = dbdata.get_vname_by_id(uid)
+    nname = dbdata.get_nname_by_id(uid)
+    counter = dbdata.get_stay_counter_by_id(uid)
+    start, end = dbdata.get_stay_start_end_by_id(uid)
+    return render_template("stays.html", counter=counter, vname=vname, nname=nname, start=start, end=end)
 
 
 @app.route("/bill")
 def bill():
-    uid = get_uid_from_cookie()
-    nname = dbdata.get_nname_by_id(uid)
-    vname = dbdata.get_vname_by_id(uid)
-    sumbeer = dbdata.get_sum_of_drink_by_id_and_gid(uid, 1)
-    sumwater = dbdata.get_sum_of_drink_by_id_and_gid(uid, 2)
-    sumeistee = dbdata.get_sum_of_drink_by_id_and_gid(uid, 3)
-    sumsoft = dbdata.get_sum_of_drink_by_id_and_gid(uid, 4)
-    sumdrinks = formatprices.format_prices(dbdata.get_sum_of_drinks_by_id(uid))
-    summeals = formatprices.format_prices(dbdata.get_sum_of_meals_by_id(uid))
-    table = tablegenerator.get_table(dbdata.get_all_edat_by_id(uid))
-    full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid)
-    full_price = formatprices.format_prices(full_price)
-    staycost = formatprices.format_prices(dbdata.get_staycost_by_id(uid))
-    startdate = date.fromisocalendar(2022, 23, 5).strftime("%d.%m.%Y")  # placeholder
-    enddate = date.fromisocalendar(2022, 25, 3).strftime("%d.%m.%Y")  # placeholder
-    flycost = formatprices.format_prices(0)  # placeholder
-
-    return render_template("bill.html", nname=nname, vname=vname, sumbeer=sumbeer, sumwater=sumwater,
-                           sumeistee=sumeistee, sumsoft=sumsoft, sum_drinks=sumdrinks, summeals=summeals,
-                           full_price=full_price, staycost=staycost, startdate=startdate, enddate=enddate,
-                           flycost=flycost, startstable=table, table=table)
+    return webwork.billing()
 
 
 @app.route("/get-cookies/UserID")
@@ -68,8 +63,8 @@ def get_vname_by_id():
     return str(json.dumps(dbconnector.sql(sql_statement)))
 
 
-@app.route("/drinkselector")  # TODO: Display Prices in HTML
-def drinkselector():  # TODO: Make HTML Buttons and counter work
+@app.route("/drinkselector")  # TODO: Make it possible to send the data to the database
+def drinkselector():
     water_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Wasser'")[0][0]
     water_price = formatprices.format_prices(water_data)
 

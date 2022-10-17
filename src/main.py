@@ -65,20 +65,18 @@ def get_vname_by_id():
 
 @app.route("/drinkselector")  # TODO: Make it possible to send the data to the database
 def drinkselector():
-    water_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Wasser'")[0][0]
-    water_price = formatprices.format_prices(water_data)
-
-    beer_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Bier'")[0][0]
-    beer_price = formatprices.format_prices(beer_data)
-
-    soft_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Softdrink'")[0][0]
-    soft_price = formatprices.format_prices(soft_data)
-
-    icetea_data = dbconnector.sql("SELECT GPreis from GETR WHERE GName = 'Eistee'")[0][0]
-    icetea_price = formatprices.format_prices(icetea_data)
-
+    water_price = dbdata.get_gprice_by_id(1)
+    beer_price = dbdata.get_gprice_by_id(2)
+    soft_price = dbdata.get_gprice_by_id(3)
+    icetea_price = dbdata.get_gprice_by_id(4)
     return render_template("drinkselector.html", beer_price=beer_price, water_price=water_price,
                            icetea_price=icetea_price, soft_price=soft_price)
+
+
+@app.route("/mealselector")
+def mealselector():
+    mealdate = date.today().strftime("%d.%m.%Y")
+    return render_template("mealselector.html", mealdate=mealdate)
 
 
 @app.route("/dbtest")

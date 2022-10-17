@@ -41,6 +41,18 @@ def get_persget_by_id_and_gid(pid, gid):
     return dbconnector.sql(sql_statement)
 
 
+def get_gprice_by_id(gid):
+    sql_statement = f"SELECT GPREIS FROM GETR WHERE GID = {gid}"
+    value = dbconnector.sql(sql_statement)
+    value = json.loads(json.dumps(value))
+    try:
+        value = value[0][0]
+    except IndexError:
+        logging.error("Table is empty")
+        value = 0
+    return formatprices.format_prices(float(value))
+
+
 def get_sum_of_drink_by_id_and_gid(uid, gid):
     sql_statement = f"SELECT GPREIS*CT FROM PERSGET NATURAL JOIN GETR WHERE ID = {uid} AND GID = {gid}"
     value = dbconnector.sql(sql_statement)

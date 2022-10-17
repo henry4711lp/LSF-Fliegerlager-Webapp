@@ -193,7 +193,7 @@
         >
       </div>
     </section>
-
+    <button id="bestellen">Bestellen</button>
     <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-3161">
       <div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-small-text u-text u-text-variant u-text-1">
@@ -209,6 +209,8 @@
   <script>
     const type = document.getElementsByClassName("drink");
     const price = { beer: 1.5, water: 1 };
+
+    document.getElementById('bestellen').addEventListener('click', bestellen());
 
     for (let x = 0; x < type.length; x++) {
       const plus = type[x].getElementsByClassName("plus")[0];
@@ -235,6 +237,17 @@
           total.innerHTML = newTotal;
         }
       });
+    }
+
+    function bestellen() {
+      let alleDaten = "";
+      const amount = document.getElementsByClassName('amount');
+      for(let x = 0; x < amount.length; x++){
+        let type = amount[x].parentNode.id;
+        alleDaten.push({type: amount[x].innerHTML});
+      }
+
+      console.log(alleDaten);
     }
   </script>
 </html>

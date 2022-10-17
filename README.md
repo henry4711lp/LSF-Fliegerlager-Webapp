@@ -1,4 +1,4 @@
-![Security Test](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/codeql-analysis.yml/badge.svg) ![Deployment](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/python-publish.yml/badge.svg) ![Dependencies](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/dependabot.yml/badge.svg)
+![Security Test](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/codeql-analysis.yml/badge.svg) ![Deployment](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/python-publish.yml/badge.svg) 
 # LSF-Fliegerlager-Webapp
 
 This app is to replace a handwritten list for "bought" drinks, dinners and accomodation days.  

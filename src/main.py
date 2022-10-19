@@ -1,8 +1,10 @@
 import json
 import logging
+
+import flask
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import date
-from src import dbdata, tablegenerator, formatprices, webwork
+from src import dbdata, webwork
 from src.connection import dbconnector
 
 # create flask app
@@ -22,14 +24,14 @@ def register():
 
 @app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML
 def home():
+    uid = get_uid_from_cookie()
     if request.method == "POST":
         if '/register' in request.referrer:
             logging.debug("Post from login")
             return webwork.signup_in(request)
         elif '/stays' in request.referrer:
             logging.debug("Post from stays")
-            webwork.stay(request)
-            return redirect(url_for('home'))
+            return webwork.stay(request)
 
     return render_template("error.html")
 
@@ -52,7 +54,7 @@ def bill():
 @app.route("/get-cookies/UserID")
 def get_uid_from_cookie():
     logging.debug("UserID: " + request.cookies.get("UserID"))
-    return request.cookies.get("UserID")  # returns the UserID cookie
+    return request.cookies.get(flask.escape("UserID"))  # returns the UserID cookie
 
 
 @app.route("/get-Vname-by-ID")

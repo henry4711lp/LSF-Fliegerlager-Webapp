@@ -10,6 +10,8 @@ from flask_wtf.csrf import CSRFProtect
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')
+csrf = CSRFProtect()
+csrf.init_app(app)
 UserID = 0
 
 
@@ -31,7 +33,8 @@ def home():
             return webwork.signup_in(request)
         elif '/stays' in request.referrer:
             logging.debug("Post from stays")
-            return webwork.stay(request)
+            webwork.stay(request)
+            return redirect(url_for('home'))
 
     return render_template("error.html")
 
@@ -54,7 +57,7 @@ def bill():
 @app.route("/get-cookies/UserID")
 def get_uid_from_cookie():
     logging.debug("UserID: " + request.cookies.get("UserID"))
-    return request.cookies.get(flask.escape("UserID"))  # returns the UserID cookie
+    return request.cookies.get("UserID")  # returns the UserID cookie
 
 
 @app.route("/get-Vname-by-ID")

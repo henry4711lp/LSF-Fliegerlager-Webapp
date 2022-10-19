@@ -2,7 +2,8 @@ import datetime
 import json
 import logging
 from datetime import date
-from flask import make_response, render_template, redirect, url_for
+
+from flask import make_response, render_template
 
 from src import dbdata, formatprices, tablegenerator
 from src.main import get_uid_from_cookie
@@ -31,7 +32,7 @@ def signup_in(request):
     return resp
 
 
-def stay(request):  # TODO: redirect not working????
+def stay(request): #TODO: redirect not working????
     uid = get_uid_from_cookie()
 
     # time calculation
@@ -41,6 +42,7 @@ def stay(request):  # TODO: redirect not working????
     end = request.form["departure"]
     end = datetime.datetime.strptime(end, "%Y-%m-%d")
     delta = (end - start).days
+
     # database updates
 
     dbdata.set_stay_start_end(uid, start, end)
@@ -51,9 +53,9 @@ def stay(request):  # TODO: redirect not working????
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")
     str_uid = str(uid)
-    logging.debug(f"Start: {start}, End: {end} written to database. Generating response...")
-   # resp = make_response(render_template('home.html', ID=uid, date=today, display_name=vname, display_ID=str_uid), 200)
-    return 0
+    logging.debug(f"Start: {start}, End: {end} written to database generating response...")
+    resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
+    return resp
 
 
 def billing():

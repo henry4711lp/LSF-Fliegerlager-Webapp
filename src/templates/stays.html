@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="keywords" content="Übernachtungen&nbsp;​">
     <meta name="description" content="">
-    <title>Übernachtungen</title>
+    <title>stays</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/nicepage.css') }}" media="screen">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/stays.css') }}" media="screen">
     <script class="u-script" type="text/javascript" src="{{ url_for('static',filename='jquery.js')}}" defer=""></script>
@@ -39,7 +39,7 @@
         <p class="u-text u-text-2">&nbsp; Bisher gebuchte Tage:&nbsp; {{counter}}</p>
         <div class="u-expanded-width u-form u-form-1">
 
-          <form  action="/stays_post" method="post" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;" redirect="true">
+          <form  action="/home" method="post" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;" redirect="true">
             <div class="u-form-date u-form-group u-form-group-1">
               <label for="date-45cb" class="u-label">Ankunft</label>
               <input type="date" value="{{start}}" id="date-45cb" name="arrival" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">

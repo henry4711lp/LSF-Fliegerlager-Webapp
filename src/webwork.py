@@ -2,7 +2,7 @@ import datetime
 import json
 import logging
 from datetime import date
-from flask import make_response, render_template, redirect, url_for
+from flask import make_response, render_template
 
 from src import dbdata, formatprices, tablegenerator
 from src.main import get_uid_from_cookie
@@ -25,7 +25,7 @@ def signup_in(request):
     str_uid = str(uid)
 
     resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
-    resp.set_cookie("UserID", f'{uid}', httponly=True)
+    resp.set_cookie("UserID", f'{uid}')
     # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie(
     # "UserID", f'{uid}', max_age=<ExpirationTime>))
     return resp

@@ -6,7 +6,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from datetime import date
 from src import dbdata, webwork
 from src.connection import dbconnector
-from flask_wtf.csrf import CSRFProtect
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')
@@ -25,6 +24,7 @@ def register():
 
 @app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML
 def home():
+    uid = get_uid_from_cookie()
     if request.method == "POST":
         if '/register' in request.referrer:
             logging.debug("Post from login")

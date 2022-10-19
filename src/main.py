@@ -18,7 +18,7 @@ def index():
 @app.route('/register')
 def register():
     resp = make_response(render_template("register.html"))
-    resp.set_cookie("UserID", '0',max_age=0)
+    resp.set_cookie("UserID", '0', max_age=0)
     return resp
 
 
@@ -30,8 +30,7 @@ def home():
             return webwork.signup_in(request)
         elif '/stays' in request.referrer:
             logging.debug("Post from stays")
-            webwork.stay(request)
-            return redirect(url_for('home'))
+            return webwork.stay(request)
 
     return render_template("error.html")
 

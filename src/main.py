@@ -54,7 +54,7 @@ def bill():
 @app.route("/get-cookies/UserID")
 def get_uid_from_cookie():
     logging.debug("UserID: " + request.cookies.get("UserID"))
-    return request.cookies.get("UserID")  # returns the UserID cookie
+    return request.cookies.get(flask.escape("UserID"))  # returns the UserID cookie
 
 
 @app.route("/get-Vname-by-ID")

@@ -1,8 +1,8 @@
 import json
 import logging
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, make_response
 from datetime import date
-from src import dbdata, tablegenerator, formatprices, webwork
+from src import dbdata, webwork
 from src.connection import dbconnector
 
 # create flask app
@@ -17,7 +17,9 @@ def index():
 
 @app.route('/register')
 def register():
-    return render_template("register.html")
+    resp = make_response(render_template("register.html"))
+    resp.set_cookie("UserID", '0',max_age=0)
+    return resp
 
 
 @app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML

@@ -26,7 +26,7 @@ def signup_in(request):
     str_uid = str(uid)
 
     resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
-    resp.set_cookie("UserID", f'{uid}', secure=True)
+    resp.set_cookie("UserID", f'{uid}')
     # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie(
     # "UserID", f'{uid}', max_age=<ExpirationTime>))
     return resp

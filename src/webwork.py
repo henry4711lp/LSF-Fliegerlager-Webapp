@@ -5,8 +5,7 @@ from datetime import date
 
 from flask import make_response, render_template
 
-from src import dbdata, formatprices, tablegenerator
-from src.main import get_uid_from_cookie
+from src import dbdata, formatprices, tablegenerator, main
 
 
 def signup_in(request):
@@ -33,7 +32,7 @@ def signup_in(request):
 
 
 def stay(request): #TODO: redirect not working????
-    uid = get_uid_from_cookie()
+    uid = main.get_uid_from_cookie()
 
     # time calculation
 

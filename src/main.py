@@ -31,8 +31,7 @@ def home():
         elif '/stays' in request.referrer:
             logging.debug("Post from stays")
             return webwork.stay(request)
-
-    return render_template("error.html")
+    return render_template("error.html"), 404
 
 
 @app.route("/stays")

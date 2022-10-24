@@ -1,9 +1,12 @@
 import json
 import logging
-from flask import Flask, render_template, request, redirect, url_for, session, make_response
 from datetime import date
-from src import dbdata, webwork
-from src.connection import dbconnector
+
+from flask import Flask, render_template, request, redirect, url_for, make_response
+
+import dbdata
+import webwork
+from connection import dbconnector
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')

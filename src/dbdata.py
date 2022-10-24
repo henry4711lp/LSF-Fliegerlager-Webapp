@@ -129,8 +129,14 @@ def get_nname_by_id(uid):
 def get_stay_start_end_by_id(uid):
     sql_statement = f"SELECT STAYDATE_START, STAYDATE_END FROM STAY WHERE ID = {uid}"
     values = dbconnector.sql(sql_statement)
-    startdate = values[0][0]
-    enddate = values[0][1]
+    try:
+        startdate = values[0][0]
+    except IndexError:
+        startdate = 0
+    try:
+        enddate = values[0][1]
+    except IndexError:
+        enddate = 0
     logging.debug(f"Startdate: {startdate} Enddate: {enddate}")
     return startdate, enddate
 
@@ -151,7 +157,10 @@ def get_stay_counter_by_id(uid):
     sql_statement = f"SELECT CTR FROM STAY WHERE ID = {uid}"
     counter = dbconnector.sql(sql_statement)
     counter = json.loads(json.dumps(counter))
-    counter = counter[0][0]
+    try:
+        counter = counter[0][0]
+    except IndexError:
+        counter = 0
     return counter
 
 

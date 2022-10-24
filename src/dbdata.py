@@ -3,7 +3,7 @@ import logging
 
 import formatprices
 import getConfig
-from connection import dbconnector, vf_data
+from src import dbconnector, vf_data
 
 logging.basicConfig(level=logging.DEBUG)
 

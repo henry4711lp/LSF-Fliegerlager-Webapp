@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, redirect, url_for, make_respo
 
 import dbdata
 import webwork
-from connection import dbconnector
+from src import dbconnector
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')

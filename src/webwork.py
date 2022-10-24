@@ -60,7 +60,7 @@ def stay(request): #TODO: redirect not working????
 
 
 def billing():
-    uid = get_uid_from_cookie()
+    uid = main.get_uid_from_cookie()
     nname = dbdata.get_nname_by_id(uid)
     vname = dbdata.get_vname_by_id(uid)
     sumbeer = dbdata.get_sum_of_drink_by_id_and_gid(uid, 1)

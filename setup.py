@@ -13,7 +13,7 @@ setup(
         'src': 'src'},
     include_package_data=True,
     keywords=[
-        'web_app', 'test', 'flask'
+        'web_app', 'test', 'flask', 'lsf-wesel-rheinhausen',
     ],
     entry_points={
         'console_scripts': [

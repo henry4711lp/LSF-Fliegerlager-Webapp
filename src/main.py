@@ -3,10 +3,8 @@ import logging
 from datetime import date
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
-
-import dbdata
-import webwork
-from src import dbconnector
+import src.webwork as webwork
+from src.connection import dbconnector, dbdata
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')

@@ -1,7 +1,7 @@
 import logging
 
 import mysql.connector
-import getConfig
+import src.getConfig as getConfig
 
 
 logging.basicConfig(level=logging.DEBUG)

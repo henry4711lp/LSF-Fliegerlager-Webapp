@@ -4,10 +4,8 @@ import logging
 from datetime import date
 
 from flask import make_response, render_template
-import dbdata
-import formatprices
-import main
-import tablegenerator
+from src.connection import dbdata
+from src import formatprices, main, tablegenerator
 
 
 def signup_in(request):

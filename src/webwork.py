@@ -71,8 +71,16 @@ def billing():
     summeals = formatprices.format_prices(dbdata.get_sum_of_meals_by_id(uid))
     table = tablegenerator.get_table(dbdata.get_all_edat_by_id(uid))
     staycost = formatprices.format_prices(dbdata.get_staycost_by_id(uid))
-    startdate = dbdata.get_stay_start_end_by_id(uid)[0].strftime("%d.%m.%Y")
-    enddate = dbdata.get_stay_start_end_by_id(uid)[1].strftime("%d.%m.%Y")
+    try:
+        startdate = dbdata.get_stay_start_end_by_id(uid)[0].strftime("%d.%m.%Y")
+    except AttributeError:
+        startdate = datetime.datetime.today().strftime("%d.%m.%Y")
+        logging.info("No startdate found")
+    try:
+        enddate = dbdata.get_stay_start_end_by_id(uid)[1].strftime("%d.%m.%Y")
+    except AttributeError:
+        enddate = datetime.datetime.today().strftime("%d.%m.%Y")
+        logging.info("No enddate found")
     flycost = formatprices.format_prices(0)  # placeholder
     full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid) + dbdata.get_staycost_by_id(uid)
     full_price = formatprices.format_prices(full_price)

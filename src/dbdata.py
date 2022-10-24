@@ -145,7 +145,10 @@ def get_staycost_by_id(uid):
     sql_statement = f"SELECT CTR FROM STAY WHERE ID = {uid}"
     counter = dbconnector.sql(sql_statement)
     counter = json.loads(json.dumps(counter))
-    counter = counter[0][0]
+    try:
+        counter = counter[0][0]
+    except IndexError:
+        counter = 0
     logging.debug(f"Staycounter: {counter}")
     cost = getConfig.get_config("stay_cost")
     logging.debug(f"Staycost: {cost}")

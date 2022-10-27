@@ -57,6 +57,20 @@ def stay(request): #TODO: redirect not working????
     return resp
 
 
+def drink(request):
+    print(request)
+    # print(request.form.get("beer"))
+    # print(request.form.get("water"))
+    # print(request.form.get("icetea"))
+    # print(request.form.get("softdrink"))
+    uid = main.get_uid_from_cookie()
+    vname = dbdata.get_vname_by_id(uid)
+    today = date.today().strftime("%d.%m.%Y")
+    str_uid = str(uid)
+    resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
+    return resp
+
+
 def billing():
     uid = main.get_uid_from_cookie()
     nname = dbdata.get_nname_by_id(uid)

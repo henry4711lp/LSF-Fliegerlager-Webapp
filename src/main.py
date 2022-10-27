@@ -32,6 +32,10 @@ def home():
         elif '/stays' in request.referrer:
             logging.debug("Post from stays")
             return webwork.stay(request)
+        elif '/drinkselector' in request.referrer:
+            logging.debug("Post from drinkselector")
+            return webwork.drink(request)
+    print (request)
     return render_template("error.html"), 404
 
 

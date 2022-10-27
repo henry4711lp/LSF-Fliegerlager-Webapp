@@ -7,7 +7,7 @@
     <meta name="description" content="" />
     <title>drinkselector</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/nicepage.css')}}" media="screen" />
-    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='styles/drinkselector.css')}}" media="screen"> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/drinkselector.css')}}" media="screen">
     <link rel="stylesheet" href="../static/styles/drinkselector.css" media="screen" />
     <link rel='shortcut icon' type='image/x-icon' href="{{ url_for('static',filename='favicon.ico') }}">
     <script class="u-script" type="text/javascript" src="{{ url_for('static',filename='jquery.js')}}" defer=""></script>
@@ -25,14 +25,6 @@
       href="{{ url_for('static',filename='styles/drinkselector-fonts.css')}}"
     />
 
-    <script type="application/ld+json">
-      {
-        "@context": "http://schema.org",
-        "@type": "Organization",
-        "name": "Site1",
-        "logo": "images/logo_trans.svg"
-      }
-    </script>
     <meta name="theme-color" content="#478ac9" />
     <meta property="og:title" content="drinkselector" />
     <meta property="og:description" content="" />
@@ -188,6 +180,7 @@
             </div>
           </div>
         </div>
+        <div id="total">0 €</div>
         <a
           class="u-border-none u-btn u-btn-round u-button-style u-gradient u-none u-radius-27 u-text-body-alt-color u-btn-9"
           >Bestätigen!</a
@@ -208,15 +201,18 @@
   </body>
   <!-- SCRIPT -->
   <script>
-    const type = document.getElementsByClassName("drink");
-    const price = { beer: 1.5, water: 1 };
+   const type = document.getElementsByClassName("drink");
+    const price = { beer: 2.7, water: 1.0, icetea: 1.8, softdrinks: 1.2 }; // Price list
+    let orderList = { beer: 0, water: 0, icetea: 0, softdrinks: 0 }; // final order list with the drink type and amount
 
-    document.getElementById('bestellen').addEventListener('click', bestellen());
+    // Calls function bestellen if button with id "bestellen" is pressed
+    document.getElementById("bestellen").addEventListener("click", () => {
+      bestellen();
+    });
 
     for (let x = 0; x < type.length; x++) {
       const plus = type[x].getElementsByClassName("plus")[0];
       const minus = type[x].getElementsByClassName("minus")[0];
-      const total = type[x].getElementsByClassName("total")[0];
       const amount = type[x].getElementsByClassName("amount")[0];
 
       /* When plus button is pressed */
@@ -224,8 +220,8 @@
         const newAmount = parseInt(amount.getAttribute("value")) + 1;
         amount.setAttribute("value", newAmount);
         amount.innerHTML = newAmount;
-        const newTotal = newAmount * price[type[x].id];
-        total.innerHTML = newTotal;
+        orderList[type[x].id] = newAmount;
+        calcTotal();
       });
 
       /* When minus button is pressed */
@@ -234,21 +230,48 @@
           const newAmount = parseInt(amount.getAttribute("value")) - 1;
           amount.setAttribute("value", newAmount);
           amount.innerHTML = newAmount;
-          const newTotal = newAmount * price[type[x].id];
-          total.innerHTML = newTotal;
+          orderList[type[x].id] = newAmount;
+          calcTotal();
         }
       });
     }
 
-    function bestellen() {
-      let alleDaten = "";
-      const amount = document.getElementsByClassName('amount');
-      for(let x = 0; x < amount.length; x++){
-        let type = amount[x].parentNode.id;
-        alleDaten.push({type: amount[x].innerHTML});
+    // Calculates the total pricing
+    function calcTotal() {
+      const length = Object.keys(orderList).length;
+      let total = 0;
+
+      for (let x = 0; x < length; x++) {
+        const priceForType = price[Object.keys(orderList)[x]];
+        total = total + orderList[Object.keys(orderList)[x]] * priceForType;
       }
 
-      console.log(alleDaten);
+      document.getElementById("total").innerHTML = addDecimal(Math.round(total * 100) / 100) + " €";
+    }
+
+    // Fills the decimal number with zeros
+    function addDecimal(number) {
+      let decimals = number.toString().split(".");
+      let newNumber;
+      if (typeof decimals[1] == "undefined") {
+        newNumber = decimals[0] + ",00";
+      } else if (decimals[1].length == 1) {
+        newNumber = decimals[0] + "," + decimals[1] + "0";
+      } else {
+        newNumber = number.toString().replace(".", ",");
+      }
+
+      return newNumber;
+    }
+
+    // Post to database
+    function bestellen() {
+      //
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/home", true);
+      xhr.setRequestHeader("Accept", "application/json");
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(orderList));
     }
   </script>
 </html>

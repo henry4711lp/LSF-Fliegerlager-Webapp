@@ -30,7 +30,7 @@ jobs:
         run: echo $GITHUB_WORKSPACE
         shell: bash
       - name: Run tests
-        run: coverage run src/test_basics.py
+        run: coverage run src/test_basics.py -v
       - name: Tests report
         run: coverage report
 

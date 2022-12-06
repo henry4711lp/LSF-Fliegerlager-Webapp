@@ -8,6 +8,17 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 def sql(sql_statement):
+    """
+    Connects to a database using the `mysql.connector` library, using a user and password defined in the `config.yaml`
+    file. The connection parameters are retrieved from the `config.yaml` file using the `getConfig.py` file.
+    
+    Executes the given `sql_statement` on the connected database, and returns all rows of the result.
+    
+    :param sql_statement: The SQL statement to be executed on the database.
+    :type sql_statement: str
+    :return: All rows of the result of the executed SQL statement.
+    :rtype: List[Tuple[Any]]
+    """
     # gets the config from the config.yaml file via the get_config.py file
     cnx = mysql.connector.connect(user=getConfig.get_config("db_user"), password=getConfig.get_config("db_password"),
                                   host=getConfig.get_config("db_host"), database=getConfig.get_config("db_name"),

@@ -200,12 +200,12 @@ def get_sum_of_all_by_id(uid):
     Returns:
         The sum of GPREIS and EPREIS values for the given user id.
     """
-    sql_statement = f"SELECT SUM(GPREIS) + SUM(EPREIS) FROM PERSGET NATURAL JOIN GETR NATURAL JOIN PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
-    return dbconnector.sql(sql_statement)
+     sql_statement = f"SELECT SUM(GPREIS) + SUM(EPREIS) FROM PERSGET NATURAL JOIN GETR NATURAL JOIN PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
+     return dbconnector.sql(sql_statement)
 
 
 def get_all_edat_by_id(uid):
-     """Returns all EDAT and CT values for the given user id (uid) from the PERSESS and ESS
+    """Returns all EDAT and CT values for the given user id (uid) from the PERSESS and ESS
     tables, joined by INNER JOIN. EDAT values are returned in the format "dd.mm.yyyy".
 
     Args:
@@ -300,7 +300,7 @@ def get_staycost_by_id(uid):
 
 
 def get_stay_counter_by_id(uid):
-     """Returns the CTR value for the given user id (uid) from the STAY table.
+    """Returns the CTR value for the given user id (uid) from the STAY table.
 
     Args:
         uid: The user id to get the CTR value for.
@@ -319,7 +319,7 @@ def get_stay_counter_by_id(uid):
 
 
 def set_stay_counter(uid, counter):
-     """Sets the CTR value for the given user id (uid) in the STAY table to the
+    """Sets the CTR value for the given user id (uid) in the STAY table to the
     given counter value.
 
     Args:
@@ -344,7 +344,7 @@ def set_stay_start_end(uid, start, end):
 
 
 def set_user_id_by_name(vname, nname):
-     """Inserts a new user into the ID and NAME tables, based on the given VNAME and NNAME values.
+    """Inserts a new user into the ID and NAME tables, based on the given VNAME and NNAME values.
 
     Args:
         vname: The VNAME value for the new user.

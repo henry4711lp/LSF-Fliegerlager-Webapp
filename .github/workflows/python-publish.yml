@@ -1,8 +1,8 @@
 name: Python Package
-
 on:
-    push:
-      branches: [ master ]
+  push:
+    branches:
+      - main # or the name of your main branch
 
 jobs:
   build:

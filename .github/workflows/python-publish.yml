@@ -20,5 +20,5 @@ jobs:
         pip install -r requirements.txt
     - name: Build and publish
       run: |
-        python setup.py sdist bdist_wheel
+        python setup.py sdist
         python -m twine upload dist/*

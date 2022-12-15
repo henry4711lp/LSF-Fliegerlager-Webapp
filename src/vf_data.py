@@ -2,7 +2,7 @@ import json
 import requests
 import hashlib
 import logging
-from src import getConfig
+import getConfig
 
 
 # Get the data from the API

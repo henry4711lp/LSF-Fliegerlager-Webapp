@@ -2,10 +2,11 @@ import datetime
 import json
 import logging
 from datetime import date
-
 from flask import make_response, render_template
-from src.connection import dbdata
-from src import formatprices, main, tablegenerator
+import dbdata
+import formatprices
+import main
+import tablegenerator
 
 
 def signup_in(request):

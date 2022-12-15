@@ -1,6 +1,5 @@
 # get data from config yaml file
 import os.path
-
 import yaml
 
 

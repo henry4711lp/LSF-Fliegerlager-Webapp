@@ -1,10 +1,9 @@
 import logging
-
 from tabulate import tabulate
 
 
 def get_table(data):
-     """
+    """
     This function uses the `tabulate` library to convert the given data into an HTML table.
     If an IndexError is raised, a message is logged with the `logging` module and the function returns 0.
     """

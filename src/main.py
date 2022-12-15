@@ -1,10 +1,17 @@
+import hashlib
+import hmac
 import json
 import logging
+import os
+import secrets
+import threading
+import time
 from datetime import date
-
 from flask import Flask, render_template, request, redirect, url_for, make_response
-import src.webwork as webwork
-from src.connection import dbconnector, dbdata
+import dbconnector
+import dbdata
+import getConfig
+import webwork
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')
@@ -35,7 +42,7 @@ def home():
         elif '/drinkselector' in request.referrer:
             logging.debug("Post from drinkselector")
             return webwork.drink(request)
-    print (request)
+    print(request)
     return render_template("error.html"), 404
 
 

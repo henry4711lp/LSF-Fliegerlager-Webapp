@@ -1,7 +1,9 @@
 import json
 import logging
-from src import formatprices, getConfig, vf_data
 import dbconnector
+import formatprices
+import getConfig
+import vf_data
 
 logging.basicConfig(level=logging.DEBUG)
 

@@ -32,7 +32,7 @@ def signup_in(request):
     return resp
 
 
-def stay(request): #TODO: redirect not working????
+def stay(request):  # TODO: redirect not working????
     uid = main.get_uid_from_cookie()
 
     # time calculation
@@ -60,12 +60,8 @@ def stay(request): #TODO: redirect not working????
 
 def drink(request):
     request = request.json
-    print(request["beer"])
-    print(request["water"])
-    print(request["icetea"])
-    print(request["softdrinks"])
-
     uid = main.get_uid_from_cookie()
+    dbdata.setdrink_ct_by_id_and_uid(request["beer"], request["water"], request["icetea"], request["softdrinks"], uid)
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")
     str_uid = str(uid)
@@ -96,7 +92,8 @@ def billing():
         enddate = datetime.datetime.today().strftime("%d.%m.%Y")
         logging.info("No enddate found")
     flycost = formatprices.format_prices(0)  # placeholder
-    full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid) + dbdata.get_staycost_by_id(uid)
+    full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid) + dbdata.get_staycost_by_id(
+        uid)
     full_price = formatprices.format_prices(full_price)
 
     return render_template("bill.html", nname=nname, vname=vname, sumbeer=sumbeer, sumwater=sumwater,

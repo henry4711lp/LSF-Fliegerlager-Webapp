@@ -77,7 +77,6 @@ Returns:
 
 
 def get_persess_by_id_and_eid(pid, eid):
-    
     sql_statement = "SELECT * FROM PERSESS WHERE ID = '" + pid + "' AND EID = '" + eid + "'"
     return dbconnector.sql(sql_statement)
 
@@ -193,7 +192,7 @@ Returns:
 
 
 def get_sum_of_all_by_id(uid):
-     """Returns the sum of all GPREIS and EPREIS values for the given user id (uid)
+    """Returns the sum of all GPREIS and EPREIS values for the given user id (uid)
     from the PERSGET, GETR, PERSESS, and ESS tables, joined by NATURAL JOIN.
 
     Args:
@@ -202,8 +201,8 @@ def get_sum_of_all_by_id(uid):
     Returns:
         The sum of GPREIS and EPREIS values for the given user id.
     """
-     sql_statement = f"SELECT SUM(GPREIS) + SUM(EPREIS) FROM PERSGET NATURAL JOIN GETR NATURAL JOIN PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
-     return dbconnector.sql(sql_statement)
+    sql_statement = f"SELECT SUM(GPREIS) + SUM(EPREIS) FROM PERSGET NATURAL JOIN GETR NATURAL JOIN PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
+    return dbconnector.sql(sql_statement)
 
 
 def get_all_edat_by_id(uid):
@@ -366,3 +365,19 @@ def set_user_id_by_name(vname, nname):
     sql_statement = f"INSERT INTO NAME VALUES ({int_id},'{vname}','{nname}')"
     dbconnector.sql(sql_statement)
     return uid
+
+
+def setdrink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
+    logging.info(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
+    getraenke = [water, beer, icetea, softdrinks]
+    for i in range(4):
+        counter = dbconnector.sql(f"SELECT CT FROM `persget` WHERE ID = {uid} AND GID = {i + 1}; ")
+        counter = json.loads(json.dumps(counter))
+        try:
+            counter = counter[0][0]
+        except IndexError:
+            logging.error("Index Error. Setting to zero.")
+            counter = 0
+        counter = counter + getraenke[i]
+        sql_statement = f"UPDATE `persget` SET CT ='{counter}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
+        dbconnector.sql(sql_statement)

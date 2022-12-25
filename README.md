@@ -41,23 +41,28 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 
 ## Tech Stack
 
-**Client:** Android Browser
+**Client:** Android Browser, HTML, CSS, JavaScript
 
 **Server:** mySQL, phpMyAdmin, Python
 
+**Python:** Flask
+
+
+
+## Run Locally
+-  Clone the project
+-  Install the requirements
+-  Install XAMPP or another mysql server and add it to the config file
+-  Start the mysql server
+-  Start the phpmyadmin server
+-  Create a user and add it to the config file
+-  Create a database and add it to the config file
+-  Import the tables from the sql file
+-  Run the main.py
 
 ## Screenshots
 
 ![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
-## Color Reference
-
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Example Color | ![#0a192f](https://via.placeholder.com/10/0a192f?text=+) #0a192f |
-| Example Color | ![#f8f8f8](https://via.placeholder.com/10/f8f8f8?text=+) #f8f8f8 |
-| Example Color | ![#00b48a](https://via.placeholder.com/10/00b48a?text=+) #00b48a |
-| Example Color | ![#00d1a0](https://via.placeholder.com/10/00b48a?text=+) #00d1a0 |
 
 
 ## FAQ

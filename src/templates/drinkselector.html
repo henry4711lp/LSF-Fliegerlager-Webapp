@@ -180,7 +180,6 @@
             </div>
           </div>
         </div>
-        <div id="total">0 €</div>
         <a
           class="u-border-none u-btn u-btn-round u-button-style u-gradient u-none u-radius-27 u-text-body-alt-color u-btn-9"
           id="bestaetigen"
@@ -188,7 +187,6 @@
         >
       </div>
     </section>
-    <button id="bestellen">Bestellen</button>
     <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-3161">
       <div class="u-clearfix u-sheet u-sheet-1">
         <p class="u-small-text u-text u-text-variant u-text-1">
@@ -203,14 +201,10 @@
   <!-- SCRIPT -->
   <script>
    const type = document.getElementsByClassName("drink");
-    const price = { beer: 1, water: 1, icetea: 1, softdrinks: 1 }; // Price list
     let orderList = { beer: 0, water: 0, icetea: 0, softdrinks: 0 }; // final order list with the drink type and amount
 
     // Calls function bestellen if button with id "bestellen" is pressed
 
-   document.getElementById("bestellen").addEventListener("click", () => {
-      bestellen();
-    });
 
     document.getElementById("bestaetigen").addEventListener("click", () => {
       bestaetigen();
@@ -280,15 +274,5 @@
       console.log(orderList);
     }
 
-    // Post to database
-    function bestellen() {
-      //
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/home", true);
-      xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify(orderList));
-
-    }
   </script>
 </html>

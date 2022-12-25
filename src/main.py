@@ -7,6 +7,8 @@ import secrets
 import threading
 import time
 from datetime import date
+from html import escape
+
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import dbconnector
 import dbdata
@@ -67,7 +69,8 @@ def bill():
 @app.route("/get-cookies/UserID")
 def get_uid_from_cookie():
     logging.debug("UserID: " + request.cookies.get("UserID"))
-    return request.cookies.get("UserID")  # returns the UserID cookie
+    cookie = request.cookies.get("UserID")
+    return escape(cookie)  # returns the UserID cookie
 
 
 @app.route("/get-Vname-by-ID")

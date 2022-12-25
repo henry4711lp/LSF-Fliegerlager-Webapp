@@ -201,10 +201,20 @@
   <!-- SCRIPT -->
   <script>
    const type = document.getElementsByClassName("drink");
-    let orderList = { beer: 0, water: 0, icetea: 0, softdrinks: 0 }; // final order list with the drink type and amount
-
+   let orderList = { beer: {{beer_ct}}, water: {{water_ct}}, icetea: {{icetea_ct}}, softdrinks: {{soft_ct}}}; // final order list with the drink type and amount
     // Calls function bestellen if button with id "bestellen" is pressed
-
+       toUpdate = type[0].getElementsByClassName("amount")[0];
+       toUpdate.setAttribute("value", orderList.beer);
+       toUpdate.innerHTML = orderList.beer;
+       toUpdate = type[1].getElementsByClassName("amount")[0];
+       toUpdate.setAttribute("value", orderList.water);
+       toUpdate.innerHTML = orderList.water;
+       toUpdate = type[2].getElementsByClassName("amount")[0];
+       toUpdate.setAttribute("value", orderList.icetea);
+       toUpdate.innerHTML = orderList.icetea;
+       toUpdate = type[3].getElementsByClassName("amount")[0];
+       toUpdate.setAttribute("value", orderList.softdrinks);
+       toUpdate.innerHTML = orderList.softdrinks;
 
     document.getElementById("bestaetigen").addEventListener("click", () => {
       bestaetigen();
@@ -221,7 +231,6 @@
         amount.setAttribute("value", newAmount);
         amount.innerHTML = newAmount;
         orderList[type[x].id] = newAmount;
-        calcTotal();
       });
 
       /* When minus button is pressed */
@@ -231,23 +240,11 @@
           amount.setAttribute("value", newAmount);
           amount.innerHTML = newAmount;
           orderList[type[x].id] = newAmount;
-          calcTotal();
         }
       });
     }
 
-    // Calculates the total pricing
-    function calcTotal() {
-      const length = Object.keys(orderList).length;
-      let total = 0;
 
-      for (let x = 0; x < length; x++) {
-        const priceForType = price[Object.keys(orderList)[x]];
-        total = total + orderList[Object.keys(orderList)[x]] * priceForType;
-      }
-
-      document.getElementById("total").innerHTML = addDecimal(Math.round(total * 100) / 100) + " €";
-    }
 
     // Fills the decimal number with zeros
     function addDecimal(number) {
@@ -255,7 +252,7 @@
       let newNumber;
       if (typeof decimals[1] == "undefined") {
         newNumber = decimals[0] + ",00";
-      } else if (decimals[1].length == 1) {
+      } else if (decimals[1].length === 1) {
         newNumber = decimals[0] + "," + decimals[1] + "0";
       } else {
         newNumber = number.toString().replace(".", ",");
@@ -267,6 +264,11 @@
     function bestaetigen()
     {
       var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() { // listen for state changes
+  if (xhr.readyState === 4 && xhr.status === 200) { // when completed we can move away
+    window.location = "/home";
+  }
+}
       xhr.open("POST", "/home", true);
       xhr.setRequestHeader("Accept", "application/json");
       xhr.setRequestHeader('Content-Type', 'application/json');

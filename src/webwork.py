@@ -2,7 +2,7 @@ import datetime
 import json
 import logging
 from datetime import date
-from flask import make_response, render_template
+from flask import make_response, render_template, redirect, url_for
 import dbdata
 import formatprices
 import main
@@ -32,7 +32,7 @@ def signup_in(request):
     return resp
 
 
-def stay(request):  # TODO: redirect not working????
+def stay(request):
     uid = main.get_uid_from_cookie()
 
     # time calculation
@@ -61,7 +61,19 @@ def stay(request):  # TODO: redirect not working????
 def drink(request):
     request = request.json
     uid = main.get_uid_from_cookie()
-    dbdata.setdrink_ct_by_id_and_uid(request["beer"], request["water"], request["icetea"], request["softdrinks"], uid)
+    dbdata.set_drink_ct_by_id_and_uid(request["beer"], request["water"], request["icetea"], request["softdrinks"], uid)
+    vname = dbdata.get_vname_by_id(uid)
+    today = date.today().strftime("%d.%m.%Y")
+    str_uid = str(uid)
+    resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
+    return resp
+
+
+def empty():
+    try:
+        uid = main.get_uid_from_cookie()
+    except TypeError:
+        return redirect(url_for('register'))
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")
     str_uid = str(uid)

@@ -42,8 +42,11 @@ def home():
         elif '/drinkselector' in request.referrer:
             logging.debug("Post from drinkselector")
             return webwork.drink(request)
+        elif '/mealselector' in request.referrer:
+            logging.debug("Post from mealselector")
+            return webwork.meal(request)
     print(request)
-    return render_template("error.html"), 404
+    return webwork.empty()
 
 
 @app.route("/stays")
@@ -77,12 +80,19 @@ def get_vname_by_id():
 
 @app.route("/drinkselector")  # TODO: Make it possible to send the data to the database
 def drinkselector():
+    uid = request.cookies.get("UserID")
     water_price = dbdata.get_gprice_by_id(1)
+    water_ct = dbdata.get_persget_by_id_and_gid(uid, 1)
     beer_price = dbdata.get_gprice_by_id(2)
+    beer_ct = dbdata.get_persget_by_id_and_gid(uid, 2)
     soft_price = dbdata.get_gprice_by_id(3)
+    soft_ct = dbdata.get_persget_by_id_and_gid(uid, 3)
     icetea_price = dbdata.get_gprice_by_id(4)
+    icetea_ct = dbdata.get_persget_by_id_and_gid(uid, 4)
+    print(f"{beer_ct}")
     return render_template("drinkselector.html", beer_price=beer_price, water_price=water_price,
-                           icetea_price=icetea_price, soft_price=soft_price)
+                           icetea_price=icetea_price, soft_price=soft_price, beer_ct=beer_ct, water_ct=water_ct,
+                           icetea_ct=icetea_ct, soft_ct=soft_ct)
 
 
 @app.route("/mealselector")

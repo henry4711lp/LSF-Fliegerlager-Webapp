@@ -92,8 +92,8 @@ Args:
 Returns:
     The entry in the PERSGET table of the database associated with the input PID and GID.
 """
-    sql_statement = "SELECT * FROM PERSGET WHERE ID = '" + pid + "' AND GID = '" + gid + "'"
-    return dbconnector.sql(sql_statement)
+    sql_statement = f"SELECT CT FROM PERSGET WHERE ID = '{int(pid)}' AND GID = '{int(gid)}'"
+    return dbconnector.sql(sql_statement)[0][0]
 
 
 def get_gprice_by_id(gid):
@@ -367,17 +367,9 @@ def set_user_id_by_name(vname, nname):
     return uid
 
 
-def setdrink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
+def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
     logging.info(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
     getraenke = [water, beer, icetea, softdrinks]
     for i in range(4):
-        counter = dbconnector.sql(f"SELECT CT FROM `persget` WHERE ID = {uid} AND GID = {i + 1}; ")
-        counter = json.loads(json.dumps(counter))
-        try:
-            counter = counter[0][0]
-        except IndexError:
-            logging.error("Index Error. Setting to zero.")
-            counter = 0
-        counter = counter + getraenke[i]
-        sql_statement = f"UPDATE `persget` SET CT ='{counter}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
+        sql_statement = f"UPDATE `persget` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
         dbconnector.sql(sql_statement)

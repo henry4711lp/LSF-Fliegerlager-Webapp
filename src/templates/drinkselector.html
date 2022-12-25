@@ -122,7 +122,7 @@
                 data-animation-direction="X"
                 data-animation-delay="500"
               >
-                <div id="eistee" class="u-container-layout u-container-layout-3 drink">
+                <div id="icetea" class="u-container-layout u-container-layout-3 drink">
                   <h4 class="u-align-center u-text u-text-9">Eistee</h4>
                   <h2 class="u-align-center u-text u-text-10">{{icetea_price}}</h2>
                   <button class="u-border-none u-btn u-button-style u-none u-btn-5 plus"
@@ -154,7 +154,7 @@
                 data-animation-direction="X"
                 data-animation-delay="750"
               >
-                <div id="softdrink" class="u-container-layout u-container-layout-4 drink">
+                <div id="softdrinks" class="u-container-layout u-container-layout-4 drink">
                   <h4 class="u-align-center u-text u-text-body-alt-color u-text-12">Softdrinks</h4>
                   <h2 class="u-align-center u-text u-text-body-alt-color u-text-13">{{soft_price}}</h2>
                   <button class="u-align-left u-border-none u-btn u-button-style u-none u-btn-7 plus"
@@ -183,6 +183,7 @@
         <div id="total">0 €</div>
         <a
           class="u-border-none u-btn u-btn-round u-button-style u-gradient u-none u-radius-27 u-text-body-alt-color u-btn-9"
+          id="bestaetigen"
           >Bestätigen!</a
         >
       </div>
@@ -202,12 +203,17 @@
   <!-- SCRIPT -->
   <script>
    const type = document.getElementsByClassName("drink");
-    const price = { beer: 2.7, water: 1.0, icetea: 1.8, softdrinks: 1.2 }; // Price list
+    const price = { beer: 1, water: 1, icetea: 1, softdrinks: 1 }; // Price list
     let orderList = { beer: 0, water: 0, icetea: 0, softdrinks: 0 }; // final order list with the drink type and amount
 
     // Calls function bestellen if button with id "bestellen" is pressed
-    document.getElementById("bestellen").addEventListener("click", () => {
+
+   document.getElementById("bestellen").addEventListener("click", () => {
       bestellen();
+    });
+
+    document.getElementById("bestaetigen").addEventListener("click", () => {
+      bestaetigen();
     });
 
     for (let x = 0; x < type.length; x++) {
@@ -264,6 +270,16 @@
       return newNumber;
     }
 
+    function bestaetigen()
+    {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/home", true);
+      xhr.setRequestHeader("Accept", "application/json");
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(orderList));
+      console.log(orderList);
+    }
+
     // Post to database
     function bestellen() {
       //
@@ -272,6 +288,7 @@
       xhr.setRequestHeader("Accept", "application/json");
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.send(JSON.stringify(orderList));
+
     }
   </script>
 </html>

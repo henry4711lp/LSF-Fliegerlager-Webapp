@@ -59,11 +59,12 @@ def stay(request): #TODO: redirect not working????
 
 
 def drink(request):
-    print(request)
-    # print(request.form.get("beer"))
-    # print(request.form.get("water"))
-    # print(request.form.get("icetea"))
-    # print(request.form.get("softdrink"))
+    request = request.json
+    print(request["beer"])
+    print(request["water"])
+    print(request["icetea"])
+    print(request["softdrinks"])
+
     uid = main.get_uid_from_cookie()
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")

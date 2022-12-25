@@ -80,6 +80,20 @@ def empty():
     resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
     return resp
 
+def meal(request):
+    request = request.json
+    print(request["beer"])
+    print(request["water"])
+    print(request["icetea"])
+    print(request["softdrinks"])
+
+    uid = main.get_uid_from_cookie()
+    vname = dbdata.get_vname_by_id(uid)
+    today = date.today().strftime("%d.%m.%Y")
+    str_uid = str(uid)
+    resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
+    return resp
+
 
 def billing():
     uid = main.get_uid_from_cookie()

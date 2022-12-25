@@ -21,12 +21,11 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 ## Roadmap
 
 - [X]  Datenbank aufsetzen
-- [ ]  basis of the app written
 - [ ]  Vereinsflieger API implemented
 - [X]  bill function implemented
 - [ ]  export function implemented
 - [X]  Design created
-- [ ]  drink function implemented
+- [X]  drink function implemented
 - [ ]  Dinner function implemented
 - [X]  Day function implemented
 - [ ]  Open issues closed

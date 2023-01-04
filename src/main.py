@@ -1,23 +1,39 @@
-import hashlib
-import hmac
 import json
 import logging
-import os
-import secrets
-import threading
-import time
 from datetime import date
 from html import escape
-
 from flask import Flask, render_template, request, redirect, url_for, make_response
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_httpauth import HTTPBasicAuth
+
 import dbconnector
 import dbdata
 import getConfig
 import webwork
+import dbexport
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')
 UserID = 0
+httpAuth = HTTPBasicAuth()
+user = getConfig.get_config("admin_username")
+pw = getConfig.get_config("admin_password")
+users = {
+    user: generate_password_hash(pw)
+}
+
+
+@httpAuth.verify_password
+def verify_password(username, password):
+    if username in users:
+        return check_password_hash(users.get(username), password)
+    return False
+
+
+@app.route('/export')
+@httpAuth.login_required
+def export():
+    return dbexport.export()
 
 
 @app.route('/')

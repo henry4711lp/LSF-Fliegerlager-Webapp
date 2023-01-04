@@ -8,6 +8,35 @@ import vf_data
 logging.basicConfig(level=logging.DEBUG)
 
 
+def get_all_data_of_uid():
+
+    return dbconnector.sql(f"SELECT * FROM ID;")
+
+
+def get_all_data_of_name():
+    return dbconnector.sql(f"SELECT * FROM NAME;")
+
+
+def get_all_data_of_ess():
+    return dbconnector.sql(f"SELECT * FROM ESS;")
+
+
+def get_all_data_of_getr():
+    return dbconnector.sql(f"SELECT * FROM GETR;")
+
+
+def get_all_data_of_persget():
+    return dbconnector.sql(f"SELECT * FROM PERSGET;")
+
+
+def get_all_data_of_persess():
+    return dbconnector.sql(f"SELECT * FROM PERSESS;")
+
+
+def get_all_data_of_stay():
+    return dbconnector.sql(f"SELECT * FROM STAY;")
+
+
 def get_id_by_name(vname, nname):
     """
 This function takes a first and last name as inputs and returns the ID associated with that name in the NAME table of the database.

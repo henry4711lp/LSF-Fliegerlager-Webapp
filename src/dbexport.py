@@ -1,7 +1,10 @@
+import datetime
+import os
+import getConfig
 import xlsxwriter
-
 import dbdata
 from os.path import exists
+import sendExport
 
 
 def export():
@@ -55,10 +58,16 @@ def export():
 
         for i in data:
             for a in i:
-                worksheet.write(data.index(i)+1, i.index(a), a, body_cell_format)
+                worksheet.write(data.index(i) + 1, i.index(a), a, body_cell_format)
         print(str(worksheet.get_name() + ' rows written successfully to ' + workbook.filename))
     workbook.close()
     if exists("export.xlsx"):
-        return "Exported successfully"
+        sendExport.send_mail(getConfig.get_config("mail_sender"), getConfig.get_config("mail_recipient"), "Exported "
+                                                                                                          "List",
+                             "Hey Admin! Your export list is ready!", ["export.xlsx"], getConfig.get_config(
+                "mail_server"), getConfig.get_config("mail_port"), getConfig.get_config("mail_username"),
+                             getConfig.get_config("mail_password"), getConfig.get_config("mail_tls"))
+        os.rename("export.xlsx", f"send/exported{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.xlsx")
+        return "Exported and send successfully"
     else:
         return "Export failed"

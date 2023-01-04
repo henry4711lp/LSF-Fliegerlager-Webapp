@@ -133,3 +133,6 @@ dmypy.json
 
 config/config.yaml
 
+#excel
+/src/send/
+*.xlsx

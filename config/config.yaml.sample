@@ -12,3 +12,10 @@ db_ssl_disabled: "false" # set to true if you don't want to use SSL
 stay_cost: "5.00" # cost per night in EUR
 admin_username: "admin" # username for the admin interface you can change that
 admin_password: "CHANGEME" # change this!
+mail_server: "smtp.gmail.com"
+mail_port: "587"
+mail_username: "your_mail_username"
+mail_password: "your_mail_password"
+mail_sender: "your_mail_sender"
+mail_recipient: "your_mail_recipient" # add recipients separated by comma
+mail_tls: "True"

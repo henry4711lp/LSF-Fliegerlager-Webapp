@@ -48,7 +48,7 @@ def register():
     return resp
 
 
-@app.route("/home", methods=["POST", "GET"])  # TODO: Display VName in HTML
+@app.route("/home", methods=["POST", "GET"])
 def home():
     if request.method == "POST":
         if '/register' in request.referrer:

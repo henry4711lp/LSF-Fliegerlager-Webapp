@@ -7,4 +7,4 @@ tabulate~=0.9.0
 setuptools~=65.6.3
 getConfig~=0.0.3
 Werkzeug~=2.2.2
-XlsxWriter~=3.0.6
+XlsxWriter~=3.0.8

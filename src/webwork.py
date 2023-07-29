@@ -2,6 +2,8 @@ import datetime
 import json
 import logging
 from datetime import date
+from html import escape
+
 from flask import make_response, render_template, redirect, url_for
 import dbdata
 import formatprices
@@ -11,7 +13,9 @@ import tablegenerator
 
 def signup_in(request):
     vname = request.form["vname"]
+    vname = escape(vname)
     nname = request.form["nname"]
+    nname = escape(nname)
     uid = json.dumps(dbdata.get_id_by_name(vname, nname))
     logging.debug("uid: " + str(uid))
     if uid == "[]":
@@ -79,6 +83,7 @@ def empty():
     str_uid = str(uid)
     resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
     return resp
+
 
 def meal(request):
     request = request.json

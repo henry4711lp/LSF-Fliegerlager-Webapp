@@ -1,10 +1,14 @@
 import json
 import logging
+import os
+import sys
 from datetime import date
 from html import escape
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_httpauth import HTTPBasicAuth
+
+from apscheduler.schedulers.background import BackgroundScheduler
 
 import dbconnector
 import dbdata
@@ -34,6 +38,14 @@ def verify_password(username, password):
 @httpAuth.login_required
 def export():
     return dbexport.export()
+
+
+@app.route('/shutdown')
+@httpAuth.login_required
+def shutdown():
+    logging.info("Shutdown called")
+    quit(0)
+    exit(0)
 
 
 @app.route('/')
@@ -127,4 +139,7 @@ def dbtest():
 
 
 if __name__ == '__main__':
+    sched = BackgroundScheduler(daemon=True)
+    sched.add_job(dbexport.export, 'interval', minutes=60)
+    sched.start()
     app.run(debug=True, host="0.0.0.0")

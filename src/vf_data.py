@@ -6,17 +6,18 @@ import getConfig
 
 
 # Get the data from the API
-def get_access_token(x):
+def get_access_token():
     url = _api_url + "interface/rest/auth/accesstoken"
     response = requests.get(url)
     data = response.json()
-    return data.get(x)
+    return data.get("accesstoken")
 
 
 _api_token = getConfig.get_config("api_token")
 _api_username = getConfig.get_config("api_username")
 _api_password = getConfig.get_config("api_password")
 _api_url = getConfig.get_config("api_url")
+_api_cid = getConfig.get_config("api_cid")
 
 
 def test():
@@ -26,21 +27,43 @@ def test():
 def login():
     logging.info('logging user ' + _api_username + ' in...')
     # post to api with username and password and api_token
-    url = _api_url + "interface/rest/auth/login"
+    url = _api_url + "interface/rest/auth/signin"
     auth_secret = input('Enter auth_secret: ')
+    accesstoken = get_access_token()
+    password = hashlib.md5(_api_password.encode()).hexdigest()
     payload = {
-        'accesstoken': get_access_token("accesstoken"),
+        'accesstoken': accesstoken,
         "username": _api_username,
-        "password": hashlib.md5(_api_password.encode()).hexdigest(),
+        "password": password,
         "appkey": _api_token,
+        "cid":  _api_cid,
         "auth_secret": auth_secret
     }
+    logging.debug('Password: ')
+    logging.debug(password)
+    logging.debug('Accesstoken' + str(accesstoken))
     logging.debug(json.dumps(payload, indent=4))
     response = requests.post(url, data=json.dumps(payload))
-    data = response.json()
-    return data
+    if response.status_code == 200:
+        return accesstoken
+    elif response.status_code == 401:
+        raise ConnectionRefusedError("Server returned 401, UNAUTHORIZED")
+    elif response.status_code >= 500:
+        raise ConnectionError("Server returned 500 or greater, INTERNAL SERVER ERROR: " + str(response.status_code))
+    else:
+        raise ConnectionError("Server returned " + str(response.status_code))
 
 
 def get_vfid(vname, nname):
     logging.info('getting vfid for ' + vname + ' ' + nname + '...')
-    return 0
+    try:
+        accesstoken = login()
+        url = _api_url + "interface/rest/auth/getuser"
+        payload = {
+            'accesstoken': accesstoken,
+        }
+        response = requests.post(url, data=json.dumps(payload))
+        return response.json().get("memberid")
+    except:
+        logging.error("Error while getting vfid")
+        return 1

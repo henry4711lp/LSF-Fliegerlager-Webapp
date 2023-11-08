@@ -15,6 +15,7 @@ import dbdata
 import getConfig
 import webwork
 import dbexport
+from src import vf_data
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')
@@ -26,6 +27,11 @@ users = {
     user: generate_password_hash(pw)
 }
 
+@app.route('/test')
+def test():
+    id = vf_data.get_vfid("jan", "sellerbeck")
+    resp = make_response(id)
+    return resp
 
 @httpAuth.verify_password
 def verify_password(username, password):

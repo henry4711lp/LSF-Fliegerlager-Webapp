@@ -7,7 +7,7 @@ from email.utils import formatdate
 from email import encoders
 
 
-def send_mail(send_from, send_to, subject, message, files=[],
+def send_mail(send_from, send_to, subject, message, files=None,
               server="localhost", port=587, username='', password='',
               use_tls=True):
     """Compose and send email with provided info and attachments.
@@ -24,6 +24,8 @@ def send_mail(send_from, send_to, subject, message, files=[],
         password (str): server auth password
         use_tls (bool): use TLS mode
     """
+    if files is None:
+        files = []
     msg = MIMEMultipart()
     msg['From'] = send_from
     msg['To'] = send_to

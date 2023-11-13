@@ -5752,7 +5752,7 @@ ul.u-text li:last-child {
 }
 .u-vertical-spacing.u-spacing-0 > li:not(:last-child) {
   margin-right: 0 !important;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 .u-backlink {
   position: relative;

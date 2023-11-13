@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import date
+import datetime
 from html import escape
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,11 +25,13 @@ users = {
     user: generate_password_hash(pw)
 }
 
+
 @app.route('/test')
 def test():
-    id = vf_data.get_vfid("jan", "sellerbeck")
-    resp = make_response(id)
+    vf_id = vf_data.get_vfid("jan", "sellerbeck")
+    resp = make_response(vf_id)
     return resp
+
 
 @httpAuth.verify_password
 def verify_password(username, password):
@@ -49,7 +51,6 @@ def export():
 def shutdown():
     logging.info("Shutdown called")
     quit(0)
-    exit(0)
 
 
 @app.route('/')
@@ -107,8 +108,8 @@ def get_uid_from_cookie():
 
 @app.route("/get-Vname-by-ID")
 def get_vname_by_id():
-    ID = request.cookies.get("UserID")
-    sql_statement = f"SELECT VNAME FROM NAME WHERE ID = {ID}"
+    uid = request.cookies.get("UserID")
+    sql_statement = f"SELECT VNAME FROM NAME WHERE ID = {uid}"
     logging.debug(json.dumps(dbconnector.sql(sql_statement)))
     return str(json.dumps(dbconnector.sql(sql_statement)))
 
@@ -116,14 +117,14 @@ def get_vname_by_id():
 @app.route("/drinkselector")  # TODO: Make it possible to send the data to the database
 def drinkselector():
     uid = request.cookies.get("UserID")
-    water_price = dbdata.get_gprice_by_id(1)
-    water_ct = dbdata.get_persget_by_id_and_gid(uid, 1)
-    beer_price = dbdata.get_gprice_by_id(2)
-    beer_ct = dbdata.get_persget_by_id_and_gid(uid, 2)
-    soft_price = dbdata.get_gprice_by_id(3)
-    soft_ct = dbdata.get_persget_by_id_and_gid(uid, 3)
-    icetea_price = dbdata.get_gprice_by_id(4)
-    icetea_ct = dbdata.get_persget_by_id_and_gid(uid, 4)
+    water_price = dbdata.get_gprice_by_id(str(1))
+    water_ct = dbdata.get_persget_by_id_and_gid(uid, str(1))
+    beer_price = dbdata.get_gprice_by_id(str(2))
+    beer_ct = dbdata.get_persget_by_id_and_gid(uid, str(2))
+    soft_price = dbdata.get_gprice_by_id(str(3))
+    soft_ct = dbdata.get_persget_by_id_and_gid(uid, str(3))
+    icetea_price = dbdata.get_gprice_by_id(str(4))
+    icetea_ct = dbdata.get_persget_by_id_and_gid(uid, str(4))
     print(f"{beer_ct}")
     return render_template("drinkselector.html", beer_price=beer_price, water_price=water_price,
                            icetea_price=icetea_price, soft_price=soft_price, beer_ct=beer_ct, water_ct=water_ct,
@@ -132,7 +133,7 @@ def drinkselector():
 
 @app.route("/mealselector")
 def mealselector():
-    mealdate = date.today().strftime("%d.%m.%Y")
+    mealdate = datetime.date.today().strftime("%d.%m.%Y")
     return render_template("mealselector.html", mealdate=mealdate)
 
 

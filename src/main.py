@@ -1,7 +1,5 @@
 import json
 import logging
-import os
-import sys
 from datetime import date
 from html import escape
 from flask import Flask, render_template, request, redirect, url_for, make_response

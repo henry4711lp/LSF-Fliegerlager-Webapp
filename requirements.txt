@@ -8,9 +8,5 @@ setuptools~=67.6.1
 getConfig~=0.0.3
 Werkzeug~=2.2.2
 flask_httpauth
-<<<<<<< Updated upstream
 XlsxWriter~=3.0.9
-=======
-XlsxWriter~=3.0.5
 APScheduler~=3.9.1.post1
->>>>>>> Stashed changes

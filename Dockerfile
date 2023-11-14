@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Kopieren des Quellcodes in das Arbeitsverzeichnis im Container
 COPY src/ .
 
+# Kopieren der Assets in das Arbeitsverzeichnis im Container
+COPY assets/ .
+
 # Umgebungsvariable setzen, um Flask im Produktionsmodus laufen zu lassen
 ENV FLASK_ENV=production
 

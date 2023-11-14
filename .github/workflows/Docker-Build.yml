@@ -24,7 +24,7 @@ jobs:
 
     - name: Deploy to Portainer
       run: |
-        echo ${{ secrets.SUDO }} | sudo -S curl -X -k POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/1/docker/containers/create?name=${{ secrets.CONTAINER_NAME }}" \
+        echo ${{ secrets.SUDO }} | sudo -S curl -X --insecure POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/1/docker/containers/create?name=${{ secrets.CONTAINER_NAME }}" \
              -H "Authorization: ${{ secrets.PORTAINER_API_TOKEN }}" \
              -H "Content-Type: application/json" \
              -d '{

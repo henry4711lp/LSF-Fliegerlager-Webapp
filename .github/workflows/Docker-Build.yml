@@ -24,7 +24,6 @@ jobs:
 
     - name: Deploy to Portainer
       run: |
-        	    # Schritt 1: Alten Container stoppen und entfernen
         curl -X POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}/stop" \
          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
         curl -X DELETE "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}" \

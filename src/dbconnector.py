@@ -24,15 +24,15 @@ def sql(sql_statement):
                                   port=getConfig.get_config("db_port"),
                                   ssl_disabled=getConfig.get_config("db_ssl_disabled"))
     if cnx.is_connected():
-        logging.info("Connected to database")
+        logging.debug("Connected to database")
         cursor = cnx.cursor()  # create cursor
         cursor.execute(sql_statement)  # execute the given sql statement
-        logging.info(f"Executed sql statement {sql_statement}")
+        logging.debug(f"Executed sql statement {sql_statement}")
         rows = cursor.fetchall()  # fetches all rows
         cnx.commit()  # commit changes
         cursor.close()  # close cursor
         cnx.close()  # close connection
-        logging.info("Closed connection to database")
+        logging.debug("Closed connection to database")
     else:
         logging.error("Connection to database failed")
         rows = 0

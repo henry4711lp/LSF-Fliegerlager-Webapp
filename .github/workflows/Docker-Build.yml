@@ -5,6 +5,9 @@ on:
     branches:
       - main  # Setzen Sie hier den Namen Ihres Haupt-Branches ein
 
+description: |
+  Dieser Workflow baut ein Docker-Image und lädt es in die Portainer-Registry hoch.
+  Anschließend wird der Container gestoppt, gelöscht, neu erstellt und gestartet.
 jobs:
   deploy:
     runs-on: self-hosted  # Verwenden Sie den selbst gehosteten Runner
@@ -43,5 +46,6 @@ jobs:
                      "RestartPolicy": { "Name": "unless-stopped" }
                    }
                  }'
-        curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}/start" \
-          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
+        curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}/start" \ 
+          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}" 
+        

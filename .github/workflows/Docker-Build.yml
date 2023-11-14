@@ -27,6 +27,7 @@ jobs:
         echo ${{ secrets.SUDO }} | sudo -S curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/1/docker/containers/create?name=${{ secrets.CONTAINER_NAME }}" \
              -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}" \
              -H "Content-Type: application/json" \
+             -H  "endpointId=2" \
              -d '{
                    "Image": "${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest",
                    "HostConfig": {

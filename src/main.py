@@ -13,7 +13,7 @@ import dbdata
 import getConfig
 import webwork
 import dbexport
-from src import vf_data
+import vf_data
 
 # create flask app
 app = Flask(__name__, static_url_path='/static')

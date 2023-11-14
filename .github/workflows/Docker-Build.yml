@@ -43,4 +43,5 @@ jobs:
                      "RestartPolicy": { "Name": "unless-stopped" }
                    }
                  }'
-        curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}/start" 
+        curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}/start" \
+          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"

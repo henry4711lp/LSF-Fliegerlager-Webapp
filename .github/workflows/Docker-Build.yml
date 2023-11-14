@@ -1,19 +1,35 @@
-name: Docker Build
+name: Deploy to Portainer with Self-Hosted Runner
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main  # Setzen Sie hier den Namen Ihres Haupt-Branches ein
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: hetzner  # Verwenden Sie den selbst gehosteten Runner
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest .
 
-    # Optional: Schritte zum Hochladen des Images in eine Docker-Registry hinzufügen
+    - name: Push Docker image to Registry
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest
+
+    - name: Deploy to Portainer
+      run: |
+        curl -X POST "http:/${{ secrets.PORTAINER_IP }}/api/endpoints/1/docker/containers/create?name=${{ secrets.CONTAINER_NAME }}" \
+             -H "Authorization: ${{ secrets.PORTAINER_API_TOKEN }}" \
+             -H "Content-Type: application/json" \
+             -d '{
+                   "Image": "${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest",
+                   "HostConfig": {
+                     "PortBindings": { "5000/tcp": [{ "HostPort": "5000" }] }
+                   }
+                 }'

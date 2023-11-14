@@ -2,7 +2,7 @@
 FROM python:3.8
 
 # Arbeitsverzeichnis im Container festlegen
-WORKDIR /app
+WORKDIR /src
 
 # Kopieren der Abhängigkeiten-Datei
 COPY requirements.txt .

@@ -11,10 +11,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Kopieren des Quellcodes in das Arbeitsverzeichnis im Container
-COPY src/ .
+COPY src/ ./src
 
 # Kopieren der Assets in das Arbeitsverzeichnis im Container
-COPY assets/ .
+COPY assets/ ./assets
 
 # Umgebungsvariable setzen, um Flask im Produktionsmodus laufen zu lassen
 ENV FLASK_ENV=production
@@ -23,4 +23,4 @@ ENV FLASK_ENV=production
 EXPOSE 5000
 
 # Befehl zum Starten der Flask-Anwendung
-CMD ["python", "main.py"]
+CMD ["python", "src/main.py"]

@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: hetzner  # Verwenden Sie den selbst gehosteten Runner
+    runs-on: self-hosted  # Verwenden Sie den selbst gehosteten Runner
 
     steps:
     - name: Checkout Repository

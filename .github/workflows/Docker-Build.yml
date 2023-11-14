@@ -30,7 +30,7 @@ jobs:
          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
         curl --insecure -X DELETE "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/images/${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest" \
          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
-        curl -X POST "http://your-portainer-host/api/endpoints/2/docker/images/create?fromImage=${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest" \
+        curl --insecure -X POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/images/create?fromImage=${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest" \
          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
         curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/create?name=${{ secrets.CONTAINER_NAME }}" \
              -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}" \

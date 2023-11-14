@@ -31,5 +31,6 @@ jobs:
                    "Image": "${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest",
                    "HostConfig": {
                      "PortBindings": { "5000/tcp": [{ "HostPort": "5000" }] }
+                      "Binds": ["${{ secrets.CONFIG_PATH }}:/app/config/config.yaml"]
                    }
                  }'

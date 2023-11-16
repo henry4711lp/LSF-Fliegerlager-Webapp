@@ -1,0 +1,48 @@
+name: Deploy to Portainer with Self-Hosted Runner
+
+on:
+  push:
+    branches:
+      - main  # Setzen Sie hier den Namen Ihres Haupt-Branches ein
+
+jobs:
+  deploy:
+    runs-on: self-hosted  # Verwenden Sie den selbst gehosteten Runner
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: |
+       echo ${{ secrets.SUDO }} | sudo -S docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest .
+
+    - name: Push Docker image to Registry
+      run: |
+       echo ${{ secrets.DOCKER_PASSWORD }} | sudo -S docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+       echo ${{ secrets.SUDO }} | sudo -S docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest
+
+    - name: Deploy to Portainer
+      run: |
+        curl --insecure -X POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}/stop" \
+         -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
+        curl --insecure -X DELETE "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}" \
+         -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
+        curl --insecure -X DELETE "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/images/${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest" \
+         -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
+        curl --insecure -X POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/images/create?fromImage=${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest" \
+         -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}"
+        curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/create?name=${{ secrets.CONTAINER_NAME }}" \
+             -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}" \
+             -H "Content-Type: application/json" \
+             -d '{
+                   "Image": "${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest",
+                   "HostConfig": {
+                     "PortBindings": { "5000/tcp": [{ "HostPort": "5000" }] } ,
+                     "Binds": ["${{ secrets.CONFIG_PATH }}:/config/config.yaml"],
+                     "RestartPolicy": { "Name": "unless-stopped" }
+                   }
+                 }'
+        curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${{ secrets.CONTAINER_NAME }}/start" \ 
+          -H "X-API-Key: ${{ secrets.PORTAINER_API_TOKEN }}" 
+        

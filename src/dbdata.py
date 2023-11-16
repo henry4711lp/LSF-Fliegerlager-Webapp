@@ -1,5 +1,7 @@
 import json
 import logging
+from html import escape
+
 import dbconnector
 import formatprices
 import getConfig
@@ -10,36 +12,37 @@ logging.basicConfig(level=logging.DEBUG)
 
 def get_all_data_of_uid():
 
-    return dbconnector.sql(f"SELECT * FROM ID;")
+    return dbconnector.sql(escape(f"SELECT * FROM ID;"))
 
 
 def get_all_data_of_name():
-    return dbconnector.sql(f"SELECT * FROM NAME;")
+    return dbconnector.sql(escape(f"SELECT * FROM NAME;"))
 
 
 def get_all_data_of_ess():
-    return dbconnector.sql(f"SELECT * FROM ESS;")
+    return dbconnector.sql(escape(f"SELECT * FROM ESS;"))
 
 
 def get_all_data_of_getr():
-    return dbconnector.sql(f"SELECT * FROM GETR;")
+    return dbconnector.sql(escape(f"SELECT * FROM GETR;"))
 
 
 def get_all_data_of_persget():
-    return dbconnector.sql(f"SELECT * FROM PERSGET;")
+    return dbconnector.sql(escape(f"SELECT * FROM PERSGET;"))
 
 
 def get_all_data_of_persess():
-    return dbconnector.sql(f"SELECT * FROM PERSESS;")
+    return dbconnector.sql(escape(f"SELECT * FROM PERSESS;"))
 
 
 def get_all_data_of_stay():
-    return dbconnector.sql(f"SELECT * FROM STAY;")
+    return dbconnector.sql(escape(f"SELECT * FROM STAY;"))
 
 
 def get_id_by_name(vname, nname):
     """
-This function takes a first and last name as inputs and returns the ID associated with that name in the NAME table of the database.
+This function takes a first and last name as inputs and returns the ID associated with that name in the NAME table of
+the database.
 
 Args:
     vname (str): The first name of the individual.
@@ -384,21 +387,21 @@ def set_user_id_by_name(vname, nname):
         The user id of the newly inserted user.
     """
     vfid = get_vfid_by_name_from_vf(vname, nname)
-    logging.info("got vfid: " + str(vfid))
+    logging.debug("got vfid: " + str(vfid))
     sql_statement = f"INSERT INTO ID VALUES (NULL, {vfid})"  ## Null is for auto increment of the ID
     dbconnector.sql(sql_statement)
     sql_statement = "SELECT MAX(ID) FROM ID "
     uid = dbconnector.sql(sql_statement)
     int_id = int(json.loads(json.dumps(uid))[0][0])
-    logging.info(f"got ID: {int_id}")
+    logging.debug(f"got ID: {int_id}")
     sql_statement = f"INSERT INTO NAME VALUES ({int_id},'{vname}','{nname}')"
     dbconnector.sql(sql_statement)
     return uid
 
 
 def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
-    logging.info(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
+    logging.debug(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
     getraenke = [water, beer, icetea, softdrinks]
     for i in range(4):
-        sql_statement = f"UPDATE `persget` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
+        sql_statement = f"UPDATE `PERSGET` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
         dbconnector.sql(sql_statement)

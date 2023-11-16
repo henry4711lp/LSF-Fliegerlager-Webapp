@@ -64,6 +64,6 @@ def get_vfid(vname, nname):
         }
         response = requests.post(url, data=json.dumps(payload))
         return response.json().get("memberid")
-    except:
+    except ConnectionError:
         logging.error("Error while getting vfid")
         return 1

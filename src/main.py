@@ -13,8 +13,7 @@ import dbdata
 import getConfig
 import webwork
 import dbexport
-from src import vf_data
-
+import vf_data
 # create flask app
 app = Flask(__name__, static_url_path='/static')
 UserID = 0
@@ -80,7 +79,6 @@ def home():
         elif '/mealselector' in request.referrer:
             logging.debug("Post from mealselector")
             return webwork.meal(request)
-    print(request)
     return webwork.empty()
 
 
@@ -109,12 +107,13 @@ def get_uid_from_cookie():
 @app.route("/get-Vname-by-ID")
 def get_vname_by_id():
     uid = request.cookies.get("UserID")
+    uid = escape(uid)
     sql_statement = f"SELECT VNAME FROM NAME WHERE ID = {uid}"
     logging.debug(json.dumps(dbconnector.sql(sql_statement)))
     return str(json.dumps(dbconnector.sql(sql_statement)))
 
 
-@app.route("/drinkselector")  # TODO: Make it possible to send the data to the database
+@app.route("/drinkselector")
 def drinkselector():
     uid = request.cookies.get("UserID")
     water_price = dbdata.get_gprice_by_id(str(1))
@@ -125,7 +124,6 @@ def drinkselector():
     soft_ct = dbdata.get_persget_by_id_and_gid(uid, str(3))
     icetea_price = dbdata.get_gprice_by_id(str(4))
     icetea_ct = dbdata.get_persget_by_id_and_gid(uid, str(4))
-    print(f"{beer_ct}")
     return render_template("drinkselector.html", beer_price=beer_price, water_price=water_price,
                            icetea_price=icetea_price, soft_price=soft_price, beer_ct=beer_ct, water_ct=water_ct,
                            icetea_ct=icetea_ct, soft_ct=soft_ct)

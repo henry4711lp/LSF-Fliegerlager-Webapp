@@ -4,6 +4,8 @@
 This app is to replace a handwritten list for "bought" drinks, dinners and accomodation days.  
 The purpose of this webapp is to decrease the workload of the club youth management in the accounting process of the flying camp and to prevent the loss of the handwritten lists.
 
+Latest version: **V0.1 Alpha**
+Latest Main Branch running on: https://main.lsf-flilaapp.sellerbeckcloud.de/
 
 ## Authors
 
@@ -42,9 +44,12 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 
 **Client:** Android Browser, HTML, CSS, JavaScript
 
-**Server:** mySQL, phpMyAdmin, Python
+**Server:** mySQL, phpMyAdmin, Python, Docker
 
-**Python:** Flask
+**Python:** Flask, mysql, mysql-connector-python, PyYAML, requests, tabulate, setuptools, getConfig, Werkzeug,
+            flask_httpauth, XlsxWriter, APScheduler
+
+**CI/CD:** Github Actions, Sonarqube, Docker, Docker-Compose, Quodana, CodeQL, Ubuntu, Github Runner
 
 
 
@@ -60,8 +65,14 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 -  Run the main.py
 
 ## Screenshots
+![login_page.png](Screenshots%2Flogin_page.png)
+![homepage.png](Screenshots%2Fhomepage.png)
+![drinks.png](Screenshots%2Fdrinks.png)
+![stays.png](Screenshots%2Fstays.png)
+![summary.png](Screenshots%2Fsummary.png)
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+## Database Design
+![database_design.png](Screenshots%2Fdatabase_design.png)
 
 
 ## FAQ
@@ -70,7 +81,7 @@ The purpose of this webapp is to decrease the workload of the club youth managem
 
 https://readme.so/de/editor
 
-#### Question 2
+#### How can I contribute?
 
-Answer 2
+Text us!
 

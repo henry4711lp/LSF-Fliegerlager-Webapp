@@ -5,7 +5,7 @@ This app is to replace a handwritten list for "bought" drinks, dinners and accom
 The purpose of this webapp is to decrease the workload of the club youth management in the accounting process of the flying camp and to prevent the loss of the handwritten lists.
 
 Latest version: **V0.1 Alpha**
-Latest Main Branch running on: https://main.lsf-flilaapp.sellerbeckcloud.de/
+Latest Main Branch running on: https://lsf-flilaapp.sellerbeckcloud.de/
 
 ## Authors
 

@@ -20,23 +20,21 @@ UserID = 0
 httpAuth = HTTPBasicAuth()
 user = getConfig.get_config("admin_username")
 pw = getConfig.get_config("admin_password")
-users = {
-    user: generate_password_hash(pw)
-}
+#users = {
+#    user: generate_password_hash(pw)
+#}
 
 
 @app.route('/test')
 def test():
-    vf_id = vf_data.get_vfid("jan", "sellerbeck")
-    resp = make_response(vf_id)
-    return resp
+    return render_template("vflogin.html")
 
 
-@httpAuth.verify_password
-def verify_password(username, password):
-    if username in users:
-        return check_password_hash(users.get(username), password)
-    return False
+# @httpAuth.verify_password
+# def verify_password(username, password):
+#     if username in users:
+#         return check_password_hash(users.get(username), password)
+#     return False
 
 
 @app.route('/export')
@@ -79,6 +77,9 @@ def home():
         elif '/mealselector' in request.referrer:
             logging.debug("Post from mealselector")
             return webwork.meal(request)
+        elif '/test' in request.referrer:
+            logging.debug("Post from test")
+            return webwork.vf(request)
     return webwork.empty()
 
 
@@ -145,4 +146,4 @@ if __name__ == '__main__':
     sched = BackgroundScheduler(daemon=True)
     sched.add_job(dbexport.export, 'interval', minutes=60)
     sched.start()
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True, host="0.0.0.0", port=5001)

@@ -24,17 +24,17 @@ def test():
     print(_api_token)
 
 
-def login():
+def login(uname, pword, twofa):
     logging.info('logging user ' + _api_username + ' in...')
     # post to api with username and password and api_token
     url = _api_url + "interface/rest/auth/signin"
-    auth_secret = input('Enter auth_secret: ')
+    auth_secret = twofa
     accesstoken = get_access_token()
     password = hashlib.md5(_api_password.encode()).hexdigest()
     payload = {
         'accesstoken': accesstoken,
-        "username": _api_username,
-        "password": password,
+        "username": uname,
+        "password": pword,
         "appkey": _api_token,
         "cid":  _api_cid,
         "auth_secret": auth_secret
@@ -54,16 +54,16 @@ def login():
         raise ConnectionError("Server returned " + str(response.status_code))
 
 
-def get_vfid(vname, nname):
+def get_vfid(vname, nname, twofa):
     logging.info('getting vfid for ' + vname + ' ' + nname + '...')
     try:
-        accesstoken = login()
+        accesstoken = login(vname, nname, twofa)
         url = _api_url + "interface/rest/auth/getuser"
         payload = {
             'accesstoken': accesstoken,
         }
         response = requests.post(url, data=json.dumps(payload))
-        return response.json().get("memberid")
+        return response.json()
     except ConnectionError:
         logging.error("Error while getting vfid")
         return 1

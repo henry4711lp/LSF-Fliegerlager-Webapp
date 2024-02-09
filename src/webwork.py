@@ -9,6 +9,7 @@ import dbdata
 import formatprices
 import main
 import tablegenerator
+from src import vf_data
 
 
 def signup_in(request):
@@ -131,3 +132,14 @@ def billing():
                            sumeistee=sumeistee, sumsoft=sumsoft, sum_drinks=sumdrinks, summeals=summeals,
                            full_price=full_price, staycost=staycost, startdate=startdate, enddate=enddate,
                            flycost=flycost, startstable=table, table=table)
+
+
+def vf(request):
+    request = request.json
+    uname = request["uname"]
+    password = request["password"]
+    twofa = request["2fa"]
+    vfresp = vf_data.get_vfid(uname, password, twofa)
+    vfresp = json.dumps(vfresp)
+    print(vfresp)
+    return render_template("vfinfo.html", forename=uname, password=password, twofa=twofa)

@@ -47,5 +47,6 @@ jobs:
         container_id=$(echo $response | grep -o '"Id":"[^"]*' | grep -o '[^"]*$')
         api_token=${{ secrets.PORTAINER_API_TOKEN }}
         curl --insecure -X  POST "https://${{ secrets.PORTAINER_IP }}:9443/api/endpoints/2/docker/containers/${container_id}/restart" \ 
-          -H "X-API-Key: ${api_token}" 
+          -H "X-API-Key: ${api_token}"  \
+          -H "Content-Type: application/json" 
         

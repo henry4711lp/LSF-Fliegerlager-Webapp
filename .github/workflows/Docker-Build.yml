@@ -19,7 +19,7 @@ jobs:
 
     - name: Push Docker image to Registry
       run: |
-       echo ${{ secrets.SUDO }} | sudo -S valdiate
+       echo ${{ secrets.SUDO }} | sudo -S validate
        echo ${{ secrets.DOCKER_PASSWORD }} | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
        echo ${{ secrets.SUDO }} | sudo docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.CONTAINER_NAME }}:latest
 

@@ -87,10 +87,10 @@ def empty():
 
 def meal(request):
     request = request.json
-    print(request["beer"])
-    print(request["water"])
-    print(request["icetea"])
-    print(request["softdrinks"])
+    print(request["normal"])
+    print(request["vegetarian"])
+    print(request["kid_normal"])
+    print(request["kid_vegetarian"])
 
     uid = main.get_uid_from_cookie()
     vname = dbdata.get_vname_by_id(uid)

@@ -66,7 +66,8 @@ Args:
 Returns:
     The VFID associated with the input name in the VF table of the database.
 """
-    return vf_data.get_vfid(vname, nname)
+    #return vf_data.get_vfid(vname, nname)
+     return None
 
 
 def get_eid_by_date(date):

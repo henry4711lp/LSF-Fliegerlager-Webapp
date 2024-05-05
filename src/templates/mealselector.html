@@ -144,11 +144,11 @@
    const type = document.getElementsByClassName("meal");
     const price = { normal: 1, vegetarian: 1, kid_normal: 1, kid_vegetarian: 1 }; // Price list
     let orderList = { normal: 0, vegetarian: 0, kid_normal: 0, kid_vegetarian: 0 }; // final order list with the drink type and amount
-
+    let count = { normal: 0, vegetarian: 0, kid_normal: 0, kid_vegetarian: 0 };
     // Calls function bestellen if button with id "bestellen" is pressed
 
    document.getElementById("bestellen").addEventListener("click", () => {
-      bestellen();
+      bestaetigen();
     });
 
     document.getElementById("bestaetigen").addEventListener("click", () => {
@@ -160,7 +160,15 @@
       const minus = type[x].getElementsByClassName("minus")[0];
       const amount = type[x].getElementsByClassName("amount")[0];
 
-     /* When minus button is pressed */
+     /* When plus button is pressed */
+  plus.addEventListener("click", () => {
+    count[type[x].id]++;
+    amount.innerHTML = count[type[x].id];
+    orderList[type[x].id] = count[type[x].id];
+    calcTotal();
+  });
+
+  /* When minus button is pressed */
   minus.addEventListener("click", () => {
     if (count[type[x].id] > 0) {
       count[type[x].id]--;

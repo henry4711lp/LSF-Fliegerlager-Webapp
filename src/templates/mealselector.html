@@ -160,25 +160,15 @@
       const minus = type[x].getElementsByClassName("minus")[0];
       const amount = type[x].getElementsByClassName("amount")[0];
 
-      /* When plus button is pressed */
-      plus.addEventListener("click", () => {
-        const newAmount = parseInt(amount.getAttribute("value")) + 1;
-        amount.setAttribute("value", newAmount);
-        amount.innerHTML = newAmount;
-        orderList[type[x].id] = newAmount;
-        calcTotal();
-      });
-
-      /* When minus button is pressed */
-      minus.addEventListener("click", () => {
-        if (parseInt(amount.getAttribute("value")) > 0) {
-          const newAmount = parseInt(amount.getAttribute("value")) - 1;
-          amount.setAttribute("value", newAmount);
-          amount.innerHTML = newAmount;
-          orderList[type[x].id] = newAmount;
-          calcTotal();
-        }
-      });
+     /* When minus button is pressed */
+  minus.addEventListener("click", () => {
+    if (count[type[x].id] > 0) {
+      count[type[x].id]--;
+      amount.innerHTML = count[type[x].id];
+      orderList[type[x].id] = count[type[x].id];
+      calcTotal();
+    }
+  });
     }
 
     // Calculates the total pricing

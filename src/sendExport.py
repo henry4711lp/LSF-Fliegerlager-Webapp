@@ -5,6 +5,7 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from email import encoders
+import getConfig
 
 
 def send_mail(send_from, send_to, subject, message, files=None,

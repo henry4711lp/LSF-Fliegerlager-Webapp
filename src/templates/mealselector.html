@@ -50,7 +50,7 @@
                     data-animation-event="scroll"
                     data-animation-duration="3000"
                   >
-                     <div class="amount" value="0">0</div>
+                     <div id="total" class="amount" value="0">0</div>
                   </h3>
                   <button class="u-border-none u-btn u-button-style u-none u-btn-2 minus">&nbsp;<span class="u-file-icon u-icon u-icon-3"><img src="{{ url_for('static',filename='images/4436695.png')}}" alt=""></span>
                   </button>
@@ -68,7 +68,7 @@
                     data-animation-event="scroll"
                     data-animation-duration="3000"
                   >
-                        <div class="amount" value="0">0</div>
+                        <div id="total" class="amount" value="0">0</div>
                   </h3>
                   <button class="u-border-none u-btn u-button-style u-none u-btn-4 minus">&nbsp;<span class="u-file-icon u-icon u-icon-5"><img src="{{ url_for('static',filename='images/4436695.png')}}" alt=""></span>
                   </button>
@@ -85,7 +85,7 @@
                     data-animation-event="scroll"
                     data-animation-duration="3000"
                   >
-                     <div class="amount" value="0">0</div>
+                     <div id="total" class="amount" value="0">0</div>
                   </h3>
                   <button  class="u-border-none u-btn u-button-style u-none u-btn-6 minus">&nbsp;<span class="u-file-icon u-icon u-icon-7"><img src="{{ url_for('static',filename='images/4436695.png')}}" alt=""></span>
                   </button>
@@ -103,7 +103,7 @@
                     data-animation-event="scroll"
                     data-animation-duration="3000"
                   >
-                     <div class="amount" value="0">0</div>
+                     <div id="total" class="amount" value="0">0</div>
                   </h3>
                   <button  class="u-align-left u-border-none u-btn u-button-style u-none u-btn-8 minus">&nbsp;<span class="u-file-icon u-icon u-icon-9"><img src="{{ url_for('static',filename='images/4436695.png')}}" alt=""></span>
                   </button>
@@ -177,16 +177,16 @@
 
     // Calculates the total pricing
     function calcTotal() {
-      const length = Object.keys(orderList).length;
-      let total = 0;
+  const length = Object.keys(orderList).length;
+  let total = 0;
 
-      for (let x = 0; x < length; x++) {
-        const priceForType = price[Object.keys(orderList)[x]];
-        total = total + orderList[Object.keys(orderList)[x]] * priceForType;
-      }
+  for (let x = 0; x < length; x++) {
+    const priceForType = price[Object.keys(orderList)[x]];
+    total = total + orderList[Object.keys(orderList)[x]] * priceForType;
+  }
 
-      document.getElementById("total").innerHTML = addDecimal(Math.round(total * 100) / 100) + " €";
-    }
+  document.getElementById("total").innerHTML = addDecimal(Math.round(total * 100) / 100) + " €";
+}
 
     // Fills the decimal number with zeros
     function addDecimal(number) {

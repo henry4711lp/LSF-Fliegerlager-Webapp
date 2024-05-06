@@ -145,7 +145,7 @@
    const type = document.getElementsByClassName("meal");
     const price = { normal: 1, vegetarian: 1, kid_normal: 1, kid_vegetarian: 1 }; // Price list
     let orderList = { normal: 0, vegetarian: 0, kid_normal: 0, kid_vegetarian: 0 }; // final order list with the drink type and amount
-    let count = { normal: 0, vegetarian: 0, kid_normal: 0, kid_vegetarian: 0 };
+    let count = {{ count | tojson }};
     // Calls function bestellen if button with id "bestellen" is pressed
 
     document.getElementById("bestaetigen").addEventListener("click", () => {

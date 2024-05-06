@@ -28,7 +28,7 @@ def sql(sql_statement):
     if cnx.is_connected():
         logging.debug("Connected to database")
         cursor = cnx.cursor()  # create cursor
-        cursor.execute(escape(sql_statement))  # execute the given sql statement
+        cursor.execute(sql_statement)  # execute the given sql statement
         logging.debug(f"Executed sql statement {sql_statement}")
         rows = cursor.fetchall()  # fetches all rows
         cnx.commit()  # commit changes

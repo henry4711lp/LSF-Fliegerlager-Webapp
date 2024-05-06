@@ -93,6 +93,7 @@ def meal(request):
     print(request["kid_vegetarian"])
 
     uid = main.get_uid_from_cookie()
+    dbdata.set_meal_ct_by_id_and_uid(request["normal"], request["vegetarian"], request["kid_normal"], request["kid_vegetarian"], uid)
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")
     str_uid = str(uid)

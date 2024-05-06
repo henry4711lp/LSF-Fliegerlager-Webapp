@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 from mysqlx.helpers import escape
@@ -7,36 +8,35 @@ import formatprices
 import getConfig
 import vf_data
 
-logging.basicConfig(level=logging.DEBUG)
 
 
 def get_all_data_of_uid():
 
-    return dbconnector.sql(escape(f"SELECT * FROM ID;"))
+    return dbconnector.sql("SELECT * FROM ID;")
 
 
 def get_all_data_of_name():
-    return dbconnector.sql(escape(f"SELECT * FROM NAME;"))
+    return dbconnector.sql("SELECT * FROM NAME;")
 
 
 def get_all_data_of_ess():
-    return dbconnector.sql(escape(f"SELECT * FROM ESS;"))
+    return dbconnector.sql("SELECT * FROM ESS;")
 
 
 def get_all_data_of_getr():
-    return dbconnector.sql(escape(f"SELECT * FROM GETR;"))
+    return dbconnector.sql("SELECT * FROM GETR;")
 
 
 def get_all_data_of_persget():
-    return dbconnector.sql(escape(f"SELECT * FROM PERSGET;"))
+    return dbconnector.sql("SELECT * FROM PERSGET;")
 
 
 def get_all_data_of_persess():
-    return dbconnector.sql(escape(f"SELECT * FROM PERSESS;"))
+    return dbconnector.sql("SELECT * FROM PERSESS;")
 
 
 def get_all_data_of_stay():
-    return dbconnector.sql(escape(f"SELECT * FROM STAY;"))
+    return dbconnector.sql("SELECT * FROM STAY;")
 
 
 def get_id_by_name(vname, nname):
@@ -51,7 +51,7 @@ Args:
 Returns:
     The ID associated with the input name in the NAME table of the database.
 """
-    sql_statement = "SELECT ID FROM NAME WHERE VNAME = '" + vname + "' AND NNAME = '" + nname + "'"
+    sql_statement = "SELECT ID FROM NAME WHERE VNAME = '" + escape(vname) + "' AND NNAME = '" + escape(nname) + "'"
     return dbconnector.sql(sql_statement)
 
 
@@ -80,7 +80,12 @@ Returns:
     The EID associated with the input date in the ESS table of the database.
 """
     sql_statement = "SELECT EID FROM ESS WHERE EDAT = '" + date + "'"
-    return dbconnector.sql(sql_statement)
+    eid = dbconnector.sql(sql_statement)
+    if not eid:
+        set_eid_with_date()
+        sql_statement = "SELECT EID FROM ESS WHERE EDAT = '" + date + "'"
+        eid = dbconnector.sql(sql_statement)
+    return eid
 
 
 def get_gpreis_by_gid(gid):
@@ -93,7 +98,7 @@ Args:
 Returns:
     The GPREIS associated with the input GID in the GETR table of the database.
 """
-    sql_statement = "SELECT GPREIS FROM GETR WHERE GID = '" + gid + "'"
+    sql_statement = "SELECT GPREIS FROM GETR WHERE GID = '" + escape(gid) + "'"
     return dbconnector.sql(sql_statement)
 
 
@@ -104,12 +109,12 @@ This function retrieves all GPREIS values from the GETR table in the database.
 Returns:
     All GPREIS values from the GETR table in the database.
 """
-    sql_statement = f"SELECT GPREIS FROM GETR;"
+    sql_statement = "SELECT GPREIS FROM GETR;"
     return dbconnector.sql(sql_statement)
 
 
 def get_persess_by_id_and_eid(pid, eid):
-    sql_statement = "SELECT * FROM PERSESS WHERE ID = '" + pid + "' AND EID = '" + eid + "'"
+    sql_statement = "SELECT * FROM PERSESS WHERE ID = '" + escape(pid) + "' AND EID = '" + str(eid) + "'"
     return dbconnector.sql(sql_statement)
 
 
@@ -124,7 +129,7 @@ Args:
 Returns:
     The entry in the PERSGET table of the database associated with the input PID and GID.
 """
-    sql_statement = f"SELECT CT FROM PERSGET WHERE ID = '{int(pid)}' AND GID = '{int(gid)}'"
+    sql_statement = "SELECT CT FROM PERSGET WHERE ID = '" + str(pid) +"' AND GID = '" + str(gid) + "'"
     return dbconnector.sql(sql_statement)[0][0]
 
 
@@ -138,7 +143,7 @@ Args:
 Returns:
     The GPREIS associated with the input GID in the GETR table of the database, formatted as a price.
 """
-    sql_statement = f"SELECT GPREIS FROM GETR WHERE GID = {gid}"
+    sql_statement = "SELECT GPREIS FROM GETR WHERE GID = " + gid
     value = dbconnector.sql(sql_statement)
     value = json.loads(json.dumps(value))
     try:
@@ -398,6 +403,14 @@ def set_user_id_by_name(vname, nname):
     dbconnector.sql(sql_statement)
     return uid
 
+def set_eid_with_date():
+    sql_statement = "SELECT MAX(EID) FROM ESS "
+    max_eid = dbconnector.sql(sql_statement)
+    max_eid = int(json.loads(json.dumps(max_eid))[0][0]) + 1
+    meal_cost = getConfig.get_config('meal_cost')
+    date = datetime.date.today().strftime("%Y-%m-%d")
+    sql_statement = f"INSERT INTO ESS VALUES ({max_eid}, {meal_cost}, '{date}')"  ## Null is for auto increment of the ID
+    dbconnector.sql(sql_statement)
 
 def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
     logging.debug(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
@@ -405,3 +418,10 @@ def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
     for i in range(4):
         sql_statement = f"UPDATE `PERSGET` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
         dbconnector.sql(sql_statement)
+def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
+    logging.debug(f"got meal: vegetarian:{veg}, normal:{norm} vegetarian_kid:{veg_kid} normal_kid:{norm_kid} uid: {uid}")
+    meals=[veg, norm, veg_kid, norm_kid]
+    eid = get_eid_by_date(datetime.date.today().strftime("%Y-%m-%d"))
+    eid = json.loads(json.dumps(eid))[0][0]
+    sql_statement = f"INSERT INTO `PERSESS` VALUES ({uid},{eid},{meals[0]},{meals[1]},{meals[2]},{meals[3]})"
+    dbconnector.sql(sql_statement)

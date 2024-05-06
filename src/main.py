@@ -131,8 +131,22 @@ def drinkselector():
 
 @app.route("/mealselector")
 def mealselector():
+    uid = request.cookies.get("UserID")
+    date = datetime.date.today().strftime("%Y-%m-%d")
+    eid = dbdata.get_eid_by_date(date)
+    eid = eid[0][0]
+    cts = dbdata.get_persess_by_id_and_eid(uid, eid)
+    normal_ct = cts[0][2]
+    vegetarian_ct = cts[0][3]
+    kid_normal_ct = cts[0][4]
+    kid_vegetarian_ct = cts[0][5]
+    print(normal_ct)
+    print(vegetarian_ct)
+    print(kid_normal_ct)
+    print(kid_vegetarian_ct)
     mealdate = datetime.date.today().strftime("%d.%m.%Y")
-    return render_template("mealselector.html", mealdate=mealdate)
+    count = [normal_ct, vegetarian_ct, kid_normal_ct, kid_vegetarian_ct]
+    return render_template("mealselector.html", mealdate=mealdate, count=count)
 
 
 @app.route("/dbtest")

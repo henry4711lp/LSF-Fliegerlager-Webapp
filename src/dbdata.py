@@ -1,6 +1,6 @@
 import json
 import logging
-from html import escape
+from mysqlx.helpers import escape
 
 import dbconnector
 import formatprices

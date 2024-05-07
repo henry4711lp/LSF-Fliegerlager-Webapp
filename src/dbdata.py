@@ -369,6 +369,9 @@ def set_stay_counter(uid, counter):
         uid: The user id to set the CTR value for.
         counter: The value to set the CTR to.
     """
+    if not get_stay_counter_by_id(uid):
+        sql_statement = f"INSERT INTO STAY VALUES ({uid}, NULL, NULL, {counter})"
+        dbconnector.sql(sql_statement)
     sql_statement = f"UPDATE STAY SET CTR = {counter} WHERE ID = {uid}"
     dbconnector.sql(sql_statement)
 
@@ -382,6 +385,9 @@ def set_stay_start_end(uid, start, end):
         start: The STAYDATE_START value to set.
         end: The STAYDATE_END value to set.
     """
+    if not get_stay_start_end_by_id(uid):
+        sql_statement = f"INSERT INTO STAY VALUES ({uid}, '{start}', '{end}', 0)"
+        dbconnector.sql(sql_statement)
     sql_statement = f"UPDATE STAY SET STAYDATE_START = '{start}', STAYDATE_END = '{end}' WHERE ID = {uid}"
     dbconnector.sql(sql_statement)
 

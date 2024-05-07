@@ -11,7 +11,6 @@ import getConfig
 import vf_data
 
 
-
 def get_all_data_of_uid():
 
     return dbconnector.sql("SELECT * FROM ID;")
@@ -219,13 +218,17 @@ Args:
 Returns:
     The total cost of all meals consumed by the specified user.
 """
-    sql_statement = f"SELECT CT*EPREIS FROM PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
+
+    sql_statement = f"SELECT CT_VEG,CT_NORM, CT_VEG_KID, CT_NORM_KID, EPreis FROM PERSESS NATURAL JOIN ESS WHERE ID = {uid}"
     value = dbconnector.sql(sql_statement)
     value = json.loads(json.dumps(value))
     logging.debug(f"Preis pro Tag: {value}")
     summe = 0
     for i in range(0, len(value)):
-        summe += value[i][0]
+        summe += value[i][0]*value[i][4]
+        summe += value[i][1]*value[i][4]
+        summe += value[i][2]*value[i][4]/2
+        summe += value[i][3]*value[i][4]/2
         logging.debug(f"Zwischensumme: {summe}")
     return summe
 
@@ -254,7 +257,7 @@ def get_all_edat_by_id(uid):
     Returns:
         A list of EDAT and CT values for the given user id.
     """
-    sql_statement = f'SELECT DATE_FORMAT(ESS.EDAT, "%d.%m.%Y"), PERSESS.CT FROM PERSESS INNER JOIN Strichliste.ESS ON PERSESS.EID = ESS.EID WHERE ID = {uid};'
+    sql_statement = f'SELECT DATE_FORMAT(ESS.EDAT, "%d.%m.%Y"), PERSESS.CT_VEG, PERSESS.CT_NORM, PERSESS.CT_VEG_KID, PERSESS.CT_NORM_KID FROM PERSESS INNER JOIN Strichliste.ESS ON PERSESS.EID = ESS.EID WHERE ID = {uid};'
     return dbconnector.sql(sql_statement)
 
 
@@ -439,3 +442,7 @@ def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
         sql_statement = f"UPDATE `PERSESS` SET CT_VEG_KID ='{meals[3]}' WHERE ID = '{uid}' AND EID = '{eid}'"
         dbconnector.sql(sql_statement)
 
+
+def get_all_starts_by_date_and_id(uid, startdate, enddate):
+    data = vf_data.get_starts_by_multiple_dates_and_id(startdate, enddate, uid)
+    return data # returns all rows

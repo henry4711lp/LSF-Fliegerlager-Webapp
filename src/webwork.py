@@ -91,12 +91,8 @@ def empty():
 
 def meal(request):
     request = request.json
-    print(request["beer"])
-    print(request["water"])
-    print(request["icetea"])
-    print(request["kid_vegetarian"])
     uid = main.get_uid_from_cookie()
-    dbdata.set_meal_ct_by_id_and_uid(request["beer"], request["water"], request["icetea"], request["kid_vegetarian"], uid)
+    dbdata.set_meal_ct_by_id_and_uid(request["normal_ct"], request["vegetarian_ct"], request["kid_normal_ct"], request["kid_vegetarian_ct"], uid)
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")
     str_uid = str(uid)
@@ -114,7 +110,7 @@ def billing():
     sumsoft = dbdata.get_sum_of_drink_by_id_and_gid(uid, str(4))
     sumdrinks = formatprices.format_prices(dbdata.get_sum_of_drinks_by_id(uid))
     summeals = formatprices.format_prices(dbdata.get_sum_of_meals_by_id(uid))
-    table = tablegenerator.get_table(dbdata.get_all_edat_by_id(uid))
+    table = tablegenerator.get_table_food(dbdata.get_all_edat_by_id(uid))
     staycost = formatprices.format_prices(dbdata.get_staycost_by_id(uid))
     try:
         startdate = dbdata.get_stay_start_end_by_id(uid)[0].strftime("%d.%m.%Y")
@@ -126,6 +122,7 @@ def billing():
     except AttributeError:
         enddate = datetime.datetime.today().strftime("%d.%m.%Y")
         logging.info("No enddate found")
+    startstable = tablegenerator.get_table(dbdata.get_all_starts_by_date_and_id(uid, startdate, enddate))  # placeholder
     flycost = formatprices.format_prices(0)  # placeholder
     full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid) + dbdata.get_staycost_by_id(
         uid)
@@ -134,4 +131,4 @@ def billing():
     return render_template("bill.html", nname=nname, vname=vname, sumbeer=sumbeer, sumwater=sumwater,
                            sumeistee=sumeistee, sumsoft=sumsoft, sum_drinks=sumdrinks, summeals=summeals,
                            full_price=full_price, staycost=staycost, startdate=startdate, enddate=enddate,
-                           flycost=flycost, startstable=table, table=table)
+                           flycost=flycost, startstable=startstable, table=table)

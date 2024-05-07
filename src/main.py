@@ -27,8 +27,10 @@ users = {
 
 @app.route('/test')
 def test():
-    vf_id = vf_data.get_vfid("jan", "sellerbeck")
-    resp = make_response(vf_id)
+    #vf_id = vf_data.get_vfid("jan", "sellerbeck")
+    uid = get_uid_from_cookie()
+    vf_id= vf_data.get_starts_by_date_and_id("2024-05-01", uid)
+    resp = make_response(str(vf_id))
     return resp
 
 
@@ -78,9 +80,6 @@ def home():
             return webwork.drink(request)
         elif '/mealselector' in request.referrer:
             logging.debug("Post from mealselector")
-            return webwork.meal(request)
-        elif '/meal20' in request.referrer:
-            logging.debug("Post from meal20")
             return webwork.meal(request)
     return webwork.empty()
 
@@ -149,23 +148,15 @@ def mealselector():
         vegetarian_ct = 0
         kid_normal_ct = 0
         kid_vegetarian_ct = 0
-    water_ct = vegetarian_ct
-    beer_ct = normal_ct
-    icetea_ct = kid_normal_ct
-    soft_ct = kid_vegetarian_ct
     prices = getConfig.get_config("meal_cost")
     prices = float(prices)
     kid_price = prices/2
     prices = "" + str(prices) + "0 €"
     kid_price = "" + str(kid_price) + " €"
-    print(normal_ct)
-    print(vegetarian_ct)
-    print(kid_normal_ct)
-    print(kid_vegetarian_ct)
     mealdate = datetime.date.today().strftime("%d.%m.%Y")
-    return render_template("meal20.html", mealdate=mealdate, normal_price=prices, vegetarian_price=prices,
-                           kid_normal_price=kid_price, kid_vegetarian_price=kid_price, beer_ct=beer_ct, water_ct=water_ct,
-                           icetea_ct=icetea_ct, soft_ct=soft_ct)
+    return render_template("mealselector.html", mealdate=mealdate, normal_price=prices, vegetarian_price=prices,
+                           kid_normal_price=kid_price, kid_vegetarian_price=kid_price, normal_ct=normal_ct, vegetarian_ct=vegetarian_ct,
+                           kid_normal_ct=kid_normal_ct, kid_vegetarian_ct=kid_vegetarian_ct)
 
 
 

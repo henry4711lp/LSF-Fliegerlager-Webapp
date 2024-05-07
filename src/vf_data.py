@@ -1,8 +1,12 @@
+import datetime
 import json
+from operator import itemgetter
+
 import requests
 import hashlib
 import logging
 import getConfig
+from src import dbdata
 
 
 # Get the data from the API
@@ -114,3 +118,148 @@ def get_vfid(vname, nname):
     except ConnectionError:
         logging.error("Error while getting vfid returning internal ID")
         return 1
+
+def get_starts_by_date_and_name(date, vname, nname):
+    """
+        This function is used to get the starts of a user by their first and last name and a date.
+        IMPORTANT: THIS FUNCTION REQUIRES THE RIGHT "Mitgliederdaten bearbeiten"/"Edit member data"
+
+        Parameters:
+        vname (str): The first name of the user.
+        nname (str): The last name of the user.
+        date (str): The date in the format "dd.mm.yyyy".
+
+        Returns:
+        List[str]: The starts of the user if found, otherwise an empty list.
+        """
+    logging.info('getting starts for ' + vname + ' ' + nname + '...')
+    try:
+        accesstoken = login()
+        url = _api_url + "interface/rest/flight/list/date"
+        payload = {
+            'accesstoken': accesstoken,
+            "dateparam": date,
+        }
+        response = requests.post(url, data=json.dumps(payload))
+        response_code = response.status_code
+        response_data =response.json()
+        if response_code != 200:
+            raise ConnectionError("Server returned " + str(response.status_code))
+        startcounter = 0
+        for flight in response_data.values():
+            try:
+                if flight.get('starttype') == '5' and flight.get('pilotname') == nname + ", " + vname:
+                    startcounter += 1
+            except AttributeError:
+                logging.debug("reached end of list")
+        return startcounter
+    except ConnectionError:
+        logging.error("Error while getting starts returning empty list")
+        return 0
+
+
+def get_starts_by_date_and_id(date, uid):
+    """
+            This function is used to get the starts of a user by their first and last name and a date.
+            IMPORTANT: THIS FUNCTION REQUIRES THE RIGHT "Mitgliederdaten bearbeiten"/"Edit member data"
+
+            Parameters:
+            uid (int): The member ID of the user.
+            date (str): The date in the format "dd.mm.yyyy".
+
+            Returns:
+            List[str]: The starts of the user if found, otherwise an empty list.
+            """
+    vname = dbdata.get_vname_by_id(uid)
+    nname = dbdata.get_nname_by_id(uid)
+    logging.info('getting starts for ' + vname + ' ' + nname + '...')
+    try:
+        accesstoken = login()
+        url = _api_url + "interface/rest/flight/list/date"
+        payload = {
+            'accesstoken': accesstoken,
+            "dateparam": date,
+        }
+        response = requests.post(url, data=json.dumps(payload))
+        response_code = response.status_code
+        response_data = response.json()
+        if response_code != 200:
+            raise ConnectionError("Server returned " + str(response.status_code))
+        startcounter = 0
+        for flight in response_data.values():
+            try:
+                if flight.get('starttype') == '5' and flight.get('pilotname') == nname + ", " + vname:
+                    startcounter += 1
+            except AttributeError:
+                logging.debug("reached end of list")
+        return startcounter
+    except ConnectionError:
+        logging.error("Error while getting starts returning empty list")
+        return 0
+
+def get_starts_by_multiple_dates_and_id(startdate, enddate, uid):
+        """
+                This function is used to get the starts of a user by their first and last name and a date.
+                IMPORTANT: THIS FUNCTION REQUIRES THE RIGHT "Mitgliederdaten bearbeiten"/"Edit member data"
+
+                Parameters:
+                uid (int): The member ID of the user.
+                date (str): The date in the format "dd.mm.yyyy".
+
+                Returns:
+                List[str]: The starts of the user if found, otherwise an empty list.
+                """
+        print(enddate)
+        print(startdate)
+        startdate_obj = datetime.datetime.strptime(startdate, "%d.%m.%Y")
+        startdate_year = startdate_obj.year
+        startdate_month = startdate_obj.month
+        startdate_day = startdate_obj.day
+        startdate_final = datetime.date(startdate_year, startdate_month, startdate_day)
+        enddate_obj = datetime.datetime.strptime(enddate, "%d.%m.%Y")
+        enddate_year = enddate_obj.year
+        enddate_month = enddate_obj.month
+        enddate_day = enddate_obj.day
+        enddate_final = datetime.date(enddate_year, enddate_month, enddate_day)
+        delta = datetime.timedelta(days=1)
+        vname = dbdata.get_vname_by_id(uid)
+        nname = dbdata.get_nname_by_id(uid)
+        logging.info('getting starts for ' + vname + ' ' + nname + '...')
+        accesstoken = login()
+        url = _api_url + "interface/rest/flight/list/date"
+        startcounter_array= {}
+        while startdate_final <= enddate_final:
+            try:
+                payload = {
+                    'accesstoken': accesstoken,
+                    "dateparam": str(startdate_final),
+                }
+                response = requests.post(url, data=json.dumps(payload))
+                response_code = response.status_code
+                response_data = response.json()
+                if response_code != 200:
+                    raise ConnectionError("Server returned " + str(response.status_code))
+                startcounter_winch = 0
+                startcounter_landing = 0
+                for flight in response_data.values():
+                    try:
+                        if flight.get('starttype') == '5' and flight.get('pilotname') == nname + ", " + vname:
+                            startcounter_winch += 1
+                        if flight.get('starttype') == '1' and flight.get('pilotname') == nname + ", " + vname:
+                            landing_sum = flight.get('landingcount')
+                            startcounter_landing += int(landing_sum)
+                    except AttributeError:
+                        logging.debug("reached end of list")
+                if startcounter_winch > 0:
+                    startdate_final_str = startdate_final.strftime("%d.%m.%Y")
+                    startcounter_array[startdate_final_str]= str(startcounter_winch) + " Winde"
+                if startcounter_landing > 0:
+                    startdate_final_str = startdate_final.strftime("%d.%m.%Y")
+                    startcounter_array[startdate_final_str]= str(startcounter_landing) + " Eigen"
+            except ConnectionError:
+                logging.error("Error while getting starts returning empty list")
+            finally:
+                startdate_final += delta
+
+        print(startcounter_array)
+        return startcounter_array

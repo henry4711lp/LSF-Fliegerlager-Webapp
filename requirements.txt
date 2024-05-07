@@ -10,3 +10,4 @@ Werkzeug>=3.0.1
 XlsxWriter~=3.0.9
 APScheduler~=3.9.1.post1
 mysqlx ~= 2.2.0
+flask_httpauth>=0.1

@@ -79,6 +79,9 @@ def home():
         elif '/mealselector' in request.referrer:
             logging.debug("Post from mealselector")
             return webwork.meal(request)
+        elif '/meal20' in request.referrer:
+            logging.debug("Post from meal20")
+            return webwork.meal(request)
     return webwork.empty()
 
 
@@ -136,17 +139,35 @@ def mealselector():
     eid = dbdata.get_eid_by_date(date)
     eid = eid[0][0]
     cts = dbdata.get_persess_by_id_and_eid(uid, eid)
-    normal_ct = cts[0][2]
-    vegetarian_ct = cts[0][3]
-    kid_normal_ct = cts[0][4]
-    kid_vegetarian_ct = cts[0][5]
+    try:
+        normal_ct = cts[0][2]
+        vegetarian_ct = cts[0][3]
+        kid_normal_ct = cts[0][4]
+        kid_vegetarian_ct = cts[0][5]
+    except IndexError:
+        normal_ct = 0
+        vegetarian_ct = 0
+        kid_normal_ct = 0
+        kid_vegetarian_ct = 0
+    water_ct = vegetarian_ct
+    beer_ct = normal_ct
+    icetea_ct = kid_normal_ct
+    soft_ct = kid_vegetarian_ct
+    prices = getConfig.get_config("meal_cost")
+    prices = float(prices)
+    kid_price = prices/2
+    prices = "" + str(prices) + "0 €"
+    kid_price = "" + str(kid_price) + " €"
     print(normal_ct)
     print(vegetarian_ct)
     print(kid_normal_ct)
     print(kid_vegetarian_ct)
     mealdate = datetime.date.today().strftime("%d.%m.%Y")
-    count = [normal_ct, vegetarian_ct, kid_normal_ct, kid_vegetarian_ct]
-    return render_template("mealselector.html", mealdate=mealdate, count=count)
+    return render_template("meal20.html", mealdate=mealdate, normal_price=prices, vegetarian_price=prices,
+                           kid_normal_price=kid_price, kid_vegetarian_price=kid_price, beer_ct=beer_ct, water_ct=water_ct,
+                           icetea_ct=icetea_ct, soft_ct=soft_ct)
+
+
 
 
 @app.route("/dbtest")
@@ -159,4 +180,5 @@ if __name__ == '__main__':
     sched = BackgroundScheduler(daemon=True)
     sched.add_job(dbexport.export, 'interval', minutes=60)
     sched.start()
+    logging.basicConfig(level=logging.DEBUG)
     app.run(debug=True, host="0.0.0.0")

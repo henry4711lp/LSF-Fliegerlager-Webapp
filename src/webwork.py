@@ -30,7 +30,11 @@ def signup_in(request):
     str_uid = str(uid)
 
     resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
-    resp.set_cookie("UserID", f'{uid}', max_age=320)
+    if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
+        logging.debug("UserID: " + request.cookies.get("UserID"))
+        resp.set_cookie("UserID", f'{uid}')
+    else:
+        resp.set_cookie("UserID", f'{uid}', max_age=320)
     # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie(
     # "UserID", f'{uid}', max_age=<ExpirationTime>))
     return resp
@@ -87,13 +91,12 @@ def empty():
 
 def meal(request):
     request = request.json
-    print(request["normal"])
-    print(request["vegetarian"])
-    print(request["kid_normal"])
+    print(request["beer"])
+    print(request["water"])
+    print(request["icetea"])
     print(request["kid_vegetarian"])
-
     uid = main.get_uid_from_cookie()
-    dbdata.set_meal_ct_by_id_and_uid(request["normal"], request["vegetarian"], request["kid_normal"], request["kid_vegetarian"], uid)
+    dbdata.set_meal_ct_by_id_and_uid(request["beer"], request["water"], request["icetea"], request["kid_vegetarian"], uid)
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")
     str_uid = str(uid)

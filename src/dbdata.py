@@ -1,6 +1,8 @@
 import datetime
 import json
 import logging
+
+import mysql
 from mysqlx.helpers import escape
 
 import dbconnector
@@ -423,5 +425,17 @@ def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
     meals=[veg, norm, veg_kid, norm_kid]
     eid = get_eid_by_date(datetime.date.today().strftime("%Y-%m-%d"))
     eid = json.loads(json.dumps(eid))[0][0]
-    sql_statement = f"INSERT INTO `PERSESS` VALUES ({uid},{eid},{meals[0]},{meals[1]},{meals[2]},{meals[3]})"
-    dbconnector.sql(sql_statement)
+    if not get_persess_by_id_and_eid(uid, eid):
+        sql_statement = f"INSERT INTO `PERSESS` VALUES ({uid},{eid},{meals[0]},{meals[1]},{meals[2]},{meals[3]})"
+        dbconnector.sql(sql_statement)
+    else:
+        logging.debug("Error while inserting into PERSESS table. Data already exists. Updating...")
+        sql_statement = f"UPDATE `PERSESS` SET CT_NORM ='{meals[0]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        dbconnector.sql(sql_statement)
+        sql_statement = f"UPDATE `PERSESS` SET CT_VEG ='{meals[1]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        dbconnector.sql(sql_statement)
+        sql_statement = f"UPDATE `PERSESS` SET CT_NORM_KID ='{meals[2]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        dbconnector.sql(sql_statement)
+        sql_statement = f"UPDATE `PERSESS` SET CT_VEG_KID ='{meals[3]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        dbconnector.sql(sql_statement)
+

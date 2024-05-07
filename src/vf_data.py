@@ -6,7 +6,7 @@ import requests
 import hashlib
 import logging
 import getConfig
-from src import dbdata
+import dbdata
 
 
 # Get the data from the API

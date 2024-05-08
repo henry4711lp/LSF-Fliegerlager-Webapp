@@ -12,7 +12,6 @@ import vf_data
 
 
 def get_all_data_of_uid():
-
     return dbconnector.sql("SELECT * FROM ID;")
 
 
@@ -131,7 +130,7 @@ Returns:
     The entry in the PERSGET table of the database associated with the input PID and GID.
 """
     try:
-        sql_statement = "SELECT CT FROM PERSGET WHERE ID = '" + str(pid) +"' AND GID = '" + str(gid) + "'"
+        sql_statement = "SELECT CT FROM PERSGET WHERE ID = '" + str(pid) + "' AND GID = '" + str(gid) + "'"
         return dbconnector.sql(sql_statement)[0][0]
     except IndexError:
         return 0
@@ -228,10 +227,10 @@ Returns:
     logging.debug(f"Preis pro Tag: {value}")
     summe = 0
     for i in range(0, len(value)):
-        summe += value[i][0]*value[i][4]
-        summe += value[i][1]*value[i][4]
-        summe += value[i][2]*value[i][4]/2
-        summe += value[i][3]*value[i][4]/2
+        summe += value[i][0] * value[i][4]
+        summe += value[i][1] * value[i][4]
+        summe += value[i][2] * value[i][4] / 2
+        summe += value[i][3] * value[i][4] / 2
         logging.debug(f"Zwischensumme: {summe}")
     return summe
 
@@ -417,6 +416,7 @@ def set_user_id_by_name(vname, nname):
     dbconnector.sql(sql_statement)
     return uid
 
+
 def set_eid_with_date():
     sql_statement = "SELECT MAX(EID) FROM ESS "
     max_eid = dbconnector.sql(sql_statement)
@@ -426,15 +426,23 @@ def set_eid_with_date():
     sql_statement = f"INSERT INTO ESS VALUES ({max_eid}, {meal_cost}, '{date}')"  ## Null is for auto increment of the ID
     dbconnector.sql(sql_statement)
 
+
 def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
     logging.debug(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
     getraenke = [water, beer, icetea, softdrinks]
     for i in range(4):
-        sql_statement = f"UPDATE `PERSGET` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
-        dbconnector.sql(sql_statement)
+        if not get_persget_by_id_and_gid(uid, i+1):
+            sql_statement = f"INSERT INTO PERSGET VALUES ({uid},{i+1},{getraenke[i]})"
+            dbconnector.sql(sql_statement)
+        else:
+            sql_statement = f"UPDATE `PERSGET` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
+            dbconnector.sql(sql_statement)
+
+
 def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
-    logging.debug(f"got meal: vegetarian:{veg}, normal:{norm} vegetarian_kid:{veg_kid} normal_kid:{norm_kid} uid: {uid}")
-    meals=[veg, norm, veg_kid, norm_kid]
+    logging.debug(
+        f"got meal: vegetarian:{veg}, normal:{norm} vegetarian_kid:{veg_kid} normal_kid:{norm_kid} uid: {uid}")
+    meals = [veg, norm, veg_kid, norm_kid]
     eid = get_eid_by_date(datetime.date.today().strftime("%Y-%m-%d"))
     eid = json.loads(json.dumps(eid))[0][0]
     if not get_persess_by_id_and_eid(uid, eid):
@@ -454,4 +462,4 @@ def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
 
 def get_all_starts_by_date_and_id(uid, startdate, enddate):
     data = vf_data.get_starts_by_multiple_dates_and_id(startdate, enddate, uid)
-    return data # returns all rows
+    return data  # returns all rows

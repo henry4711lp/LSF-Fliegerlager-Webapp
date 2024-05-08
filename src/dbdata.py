@@ -130,8 +130,11 @@ Args:
 Returns:
     The entry in the PERSGET table of the database associated with the input PID and GID.
 """
-    sql_statement = "SELECT CT FROM PERSGET WHERE ID = '" + str(pid) +"' AND GID = '" + str(gid) + "'"
-    return dbconnector.sql(sql_statement)[0][0]
+    try:
+        sql_statement = "SELECT CT FROM PERSGET WHERE ID = '" + str(pid) +"' AND GID = '" + str(gid) + "'"
+        return dbconnector.sql(sql_statement)[0][0]
+    except IndexError:
+        return 0
 
 
 def get_gprice_by_id(gid):

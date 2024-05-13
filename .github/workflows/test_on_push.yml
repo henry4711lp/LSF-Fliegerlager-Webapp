@@ -1,43 +1,22 @@
-name: Test cases
-on:
-  push:
-    tags:
-      - '!refs/tags/*'
-    branches:
-      - '*'
+name: Python application test
+
+on: [push]
+
 jobs:
-  run_tests:
-    runs-on: [ubuntu-latest]
-#    container:
-#      image: docker://repo:tag
-#      env:
-#        T1: t1
+  build:
 
-    strategy:
-      matrix:
-        python-version: [3.9]
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install requirements
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: echo workspace
-        run: echo $GITHUB_WORKSPACE
-        shell: bash
-      - name: Run tests
-        run: coverage run src/test_basics.py -v
-      - name: Tests report
-        run: coverage report
-
-      - name: Hello world action step
-        id: hello
-        uses: ozada/test-action@v1
-        with:
-          who-to-greet: 'Jan Sellerbeck'
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run tests
+      run: |
+        python -m unittest discover tests

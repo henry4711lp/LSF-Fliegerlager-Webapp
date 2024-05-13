@@ -69,30 +69,21 @@ def register():
 @app.route("/home", methods=["POST", "GET"])
 def home():
     if request.method == "POST":
-        if '/register' in request.referrer:
-            logging.debug("Post from login")
-            return webwork.signup_in(request)
-        elif '/stays' in request.referrer:
-            logging.debug("Post from stays")
-            return webwork.stay(request)
-        elif '/drinkselector' in request.referrer:
-            logging.debug("Post from drinkselector")
-            return webwork.drink(request)
-        elif '/mealselector' in request.referrer:
-            logging.debug("Post from mealselector")
-            return webwork.meal(request)
+        referrer_endpoints = ['/register', '/stays', '/drinkselector', '/mealselector']
+        functions = [webwork.signup_in, webwork.stay, webwork.drink, webwork.meal]
+        for endpoint, function in zip(referrer_endpoints, functions):
+            if endpoint in request.referrer:
+                logging.debug(f"Post from {endpoint[1:]}")
+                return function(request)
     return webwork.empty()
 
 
 @app.route("/stays")
 def stays():
-    try:
-        uid = get_uid_from_cookie()
-    except TypeError:
+    uid = request.cookies.get("UserID")
+    if uid is None:
         return redirect(url_for('register'))
-    vname = dbdata.get_vname_by_id(uid)
-    nname = dbdata.get_nname_by_id(uid)
-    counter = dbdata.get_stay_counter_by_id(uid)
+    vname, nname, counter = dbdata.get_vname_by_id(uid), dbdata.get_nname_by_id(uid), dbdata.get_stay_counter_by_id(uid)
     start, end = dbdata.get_stay_start_end_by_id(uid)
     return render_template("stays.html", counter=counter, vname=vname, nname=nname, start=start, end=end)
 
@@ -107,9 +98,10 @@ def bill():
 
 @app.route("/get-cookies/UserID")
 def get_uid_from_cookie():
-    logging.debug("UserID: " + request.cookies.get("UserID"))
-    cookie = request.cookies.get("UserID")
-    return escape(cookie)  # returns the UserID cookie
+    uid = request.cookies.get("UserID")
+    if uid is None:
+        return redirect(url_for('register'))
+    return escape(uid)
 
 
 @app.route("/get-Vname-by-ID")
@@ -123,26 +115,49 @@ def get_vname_by_id():
 
 @app.route("/drinkselector")
 def drinkselector():
+    """
+        This is a Flask route that handles requests to the "/drinkselector" endpoint.
+
+        When a GET request is made to this endpoint, it retrieves the user ID from the cookies.
+        If the user ID is not found, it redirects to the 'register' page.
+
+        It then creates a list of drinks and retrieves the prices and counts for each drink from the database.
+        The prices and counts are then passed to the "drinkselector.html" template and rendered.
+
+        Returns:
+            str: A string of HTML rendered with the "drinkselector.html" template.
+        """
     uid = request.cookies.get("UserID")
-    water_price = dbdata.get_gprice_by_id(str(1))
-    #try:
-    water_ct = dbdata.get_persget_by_id_and_gid(uid, str(1))
-    #except IndexError:
-        #return redirect(url_for('register'))
-    beer_price = dbdata.get_gprice_by_id(str(2))
-    beer_ct = dbdata.get_persget_by_id_and_gid(uid, str(2))
-    soft_price = dbdata.get_gprice_by_id(str(3))
-    soft_ct = dbdata.get_persget_by_id_and_gid(uid, str(3))
-    icetea_price = dbdata.get_gprice_by_id(str(4))
-    icetea_ct = dbdata.get_persget_by_id_and_gid(uid, str(4))
-    return render_template("drinkselector.html", beer_price=beer_price, water_price=water_price,
-                           icetea_price=icetea_price, soft_price=soft_price, beer_ct=beer_ct, water_ct=water_ct,
-                           icetea_ct=icetea_ct, soft_ct=soft_ct)
+    if uid is None:
+        return redirect(url_for('register'))
+    drinks = ['water', 'beer', 'soft', 'icetea']
+    prices = {drink: dbdata.get_gprice_by_id(str(i + 1)) for i, drink in enumerate(drinks)}
+    counts = {drink: dbdata.get_persget_by_id_and_gid(uid, str(i + 1)) for i, drink in enumerate(drinks)}
+    return render_template("drinkselector.html", beer_price=prices['beer'], water_price=prices['water'],
+                           icetea_price=prices['icetea'], soft_price=prices['soft'], beer_ct=counts['beer'],
+                           water_ct=counts['water'], icetea_ct=counts['icetea'], soft_ct=counts['soft'])
 
 
 @app.route("/mealselector")
 def mealselector():
+    """
+      This is a Flask route that handles requests to the "/mealselector" endpoint.
+
+      When a GET request is made to this endpoint, it retrieves the user ID from the cookies.
+      If the user ID is not found, it redirects to the 'register' page.
+
+      It then retrieves the event ID corresponding to today's date and the meal counts for the user.
+      If the meal counts are not found, it redirects to the 'register' page.
+
+      The meal counts are then used to calculate the prices for different types of meals.
+      The prices and meal counts are then passed to the "mealselector.html" template and rendered.
+
+      Returns:
+          render_template: Returns the "mealselector.html" template filled with the according data.
+      """
     uid = request.cookies.get("UserID")
+    if uid is None:
+        return redirect(url_for('register'))
     date = datetime.date.today().strftime("%Y-%m-%d")
     eid = dbdata.get_eid_by_date(date)
     eid = eid[0][0]
@@ -150,21 +165,13 @@ def mealselector():
         cts = dbdata.get_persess_by_id_and_eid(uid, eid)
     except TypeError:
         return redirect(url_for('register'))
-    try:
-        vegetarian_ct = cts[0][2]
-        normal_ct = cts[0][3]
-        kid_vegetarian_ct = cts[0][4]
-        kid_normal_ct = cts[0][5]
-    except IndexError:
-        normal_ct = 0
-        vegetarian_ct = 0
-        kid_normal_ct = 0
-        kid_vegetarian_ct = 0
-    prices = getConfig.get_config("meal_cost")
-    prices = float(prices)
+    meal_counts = cts[0][2:6]
+    meal_counts = [count or 0 for count in meal_counts]
+    vegetarian_ct, normal_ct, kid_vegetarian_ct, kid_normal_ct = meal_counts
+    prices = float(getConfig.get_config("meal_cost"))
     kid_price = prices/2
-    prices = "" + str(prices) + "0 €"
-    kid_price = "" + str(kid_price) + " €"
+    prices = f"{prices}0 €"
+    kid_price = f"{kid_price} €"
     mealdate = datetime.date.today().strftime("%d.%m.%Y")
     return render_template("mealselector.html", mealdate=mealdate, normal_price=prices, vegetarian_price=prices,
                            kid_normal_price=kid_price, kid_vegetarian_price=kid_price, normal_ct=normal_ct, vegetarian_ct=vegetarian_ct,
@@ -175,6 +182,18 @@ def mealselector():
 
 @app.route("/dbtest")
 def dbtest():
+    """
+    This is a Flask route that handles requests to the "/dbtest" endpoint.
+
+    When a GET request is made to this endpoint, it executes a SQL query to
+    retrieve the maximum ID from the ID table in the database. The result of
+    this query is then returned as the response to the request.
+
+    Returns:
+        list: A list containing the result of the SQL query. If the query is
+        successful, the list will contain a single element which is the maximum
+        ID. If the query fails, the list will be empty.
+    """
     sql_statement = f"SELECT MAX(ID) FROM ID "
     return dbconnector.sql(sql_statement)
 

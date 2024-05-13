@@ -9,6 +9,7 @@ import dbdata
 import formatprices
 import main
 import tablegenerator
+from src import vf_data
 
 
 def signup_in(request):
@@ -70,7 +71,10 @@ def stay(request):
 
 def drink(request):
     request = request.json
-    uid = main.get_uid_from_cookie()
+    try:
+        uid = main.get_uid_from_cookie()
+    except TypeError:
+        return redirect(url_for('register'))
     dbdata.set_drink_ct_by_id_and_uid(request["beer"], request["water"], request["icetea"], request["softdrinks"], uid)
     vname = dbdata.get_vname_by_id(uid)
     today = date.today().strftime("%d.%m.%Y")
@@ -124,7 +128,7 @@ def billing():
     except AttributeError:
         enddate = datetime.datetime.today().strftime("%d.%m.%Y")
         logging.info("No enddate found")
-    startstable = tablegenerator.get_table(dbdata.get_all_starts_by_date_and_id(uid, startdate, enddate))  # placeholder
+    startstable = tablegenerator.get_table(vf_data.get_starts_by_multiple_dates_and_id(startdate, enddate, uid))  # placeholder
     flycost = formatprices.format_prices(0)  # placeholder
     full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid) + dbdata.get_staycost_by_id(
         uid)

@@ -3,6 +3,7 @@ import json
 import logging
 
 import mysql
+from flask import redirect, url_for
 from mysqlx.helpers import escape
 
 import dbconnector
@@ -115,6 +116,22 @@ Returns:
 
 
 def get_persess_by_id_and_eid(pid, eid):
+    """
+    This function retrieves data from the 'PERSESS' table in the database for a specific user ID and event ID.
+
+    Args:
+        pid (int): The user ID to search for in the database.
+        eid (int): The event ID to search for in the database.
+
+    Returns:
+        list: A list containing the result of the SQL query. If the query is successful, the list will contain the data
+        associated with the given user ID and event ID from the 'PERSESS' table. If the query fails, the list will be empty.
+
+    Raises:
+        RedirectException: If the provided user ID is None or not an integer, the function will redirect to the 'register' page.
+    """
+    if not pid or not isinstance(pid, int):
+        return redirect(url_for('register'))
     sql_statement = "SELECT * FROM PERSESS WHERE ID = '" + escape(pid) + "' AND EID = '" + str(eid) + "'"
     return dbconnector.sql(sql_statement)
 
@@ -421,6 +438,13 @@ def set_user_id_by_name(vname, nname):
     return uid
 
 def set_eid_with_date():
+    """
+        This function inserts a new event into the 'ESS' table in the database with a new EID, the current date, and the meal cost.
+
+        The new EID is calculated by finding the maximum EID currently in the 'ESS' table and adding 1 to it. The meal cost is retrieved from the configuration.
+
+        The function does not take any arguments and does not return any value. It directly interacts with the database to perform the insertion operation.
+        """
     sql_statement = "SELECT MAX(EID) FROM ESS "
     max_eid = dbconnector.sql(sql_statement)
     max_eid = int(json.loads(json.dumps(max_eid))[0][0]) + 1
@@ -430,18 +454,49 @@ def set_eid_with_date():
     dbconnector.sql(sql_statement)
 
 def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
+    """
+        This function updates the count of each type of drink for a specific user in the 'PERSGET' table in the database.
+
+        The function takes the count of each type of drink and the user ID as inputs. It then tries to update the count of each type of drink for the user in the 'PERSGET' table. If the user does not exist in the table, it inserts a new row with the user ID and the counts of each type of drink.
+
+        Args:
+            beer (int): The count of beers.
+            water (int): The count of waters.
+            icetea (int): The count of iceteas.
+            softdrinks (int): The count of softdrinks.
+            uid (int): The user ID.
+
+        Raises:
+            IndexError: If the user does not exist in the 'PERSGET' table, the function will insert a new row with the user ID and the counts of each type of drink.
+        """
     logging.debug(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
-    getraenke = [water, beer, icetea, softdrinks]
+    getraenke = [water, beer, softdrinks, icetea]
     for i in range(4):
-        if not get_persget_by_id_and_gid(uid, i+1):
-            sql_statement = f"INSERT INTO PERSGET VALUES ({uid},{i+1},{getraenke[i]})"
-            dbconnector.sql(sql_statement)
-        else:
+        try:
             sql_statement = f"UPDATE `PERSGET` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
+            dbconnector.sql(sql_statement)
+        except IndexError:
+            logging.debug("Error while inserting into PERSGET table. Data does not exists. Inserting...")
+            sql_statement = f"INSERT INTO `PERSGET` VALUES ({uid},{i + 1},{getraenke[i]})"
             dbconnector.sql(sql_statement)
 
 
 def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
+    """
+       This function updates the count of each type of meal for a specific user in the 'PERSESS' table in the database.
+
+       The function takes the count of each type of meal and the user ID as inputs. It then tries to update the count of each type of meal for the user in the 'PERSESS' table. If the user does not exist in the table, it inserts a new row with the user ID and the counts of each type of meal.
+
+       Args:
+           veg (int): The count of vegetarian meals.
+           norm (int): The count of normal meals.
+           veg_kid (int): The count of vegetarian meals for kids.
+           norm_kid (int): The count of normal meals for kids.
+           uid (int): The user ID.
+
+       Raises:
+           IndexError: If the user does not exist in the 'PERSESS' table, the function will insert a new row with the user ID and the counts of each type of meal.
+       """
     logging.debug(
         f"got meal: vegetarian:{veg}, normal:{norm} vegetarian_kid:{veg_kid} normal_kid:{norm_kid} uid: {uid}")
     meals = [veg, norm, veg_kid, norm_kid]
@@ -460,8 +515,3 @@ def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
         dbconnector.sql(sql_statement)
         sql_statement = f"UPDATE `PERSESS` SET CT_VEG_KID ='{meals[3]}' WHERE ID = '{uid}' AND EID = '{eid}'"
         dbconnector.sql(sql_statement)
-
-
-def get_all_starts_by_date_and_id(uid, startdate, enddate):
-    data = vf_data.get_starts_by_multiple_dates_and_id(startdate, enddate, uid)
-    return data # returns all rows

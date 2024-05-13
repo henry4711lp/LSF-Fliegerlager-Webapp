@@ -130,10 +130,16 @@ def get_persess_by_id_and_eid(pid, eid):
     Raises:
         RedirectException: If the provided user ID is None or not an integer, the function will redirect to the 'register' page.
     """
-    if not pid or not isinstance(pid, int):
-        return redirect(url_for('register'))
+    if not eid or not isinstance(eid, int):
+        set_eid_with_date()
     sql_statement = "SELECT * FROM PERSESS WHERE ID = '" + escape(pid) + "' AND EID = '" + str(eid) + "'"
-    return dbconnector.sql(sql_statement)
+    sql_result = dbconnector.sql(sql_statement)
+    if not sql_result:
+        sql_statement = "INSERT INTO PERSESS VALUES ('" + escape(pid) + "', '" + str(eid) + "', 0, 0, 0, 0)"
+        dbconnector.sql(sql_statement)
+        sql_statement = "SELECT * FROM PERSESS WHERE ID = '" + escape(pid) + "' AND EID = '" + str(eid) + "'"
+        sql_result = dbconnector.sql(sql_statement)
+    return sql_result
 
 
 def get_persget_by_id_and_gid(pid, gid):

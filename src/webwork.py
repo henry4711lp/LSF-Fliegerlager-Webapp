@@ -31,11 +31,7 @@ def signup_in(request):
     str_uid = str(uid)
 
     resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
-    if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
-        logging.debug("UserID: " + request.cookies.get("UserID"))
-        resp.set_cookie("UserID", f'{uid}')
-    else:
-        resp.set_cookie("UserID", f'{uid}', max_age=320)
+    resp.set_cookie("UserID", f'{uid}', max_age=320)
     # Man könnte hier noch eine Ablaufzeit für die Cookies setzen mit resp.set_cookie(
     # "UserID", f'{uid}', max_age=<ExpirationTime>))
     return resp

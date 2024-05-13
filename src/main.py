@@ -161,10 +161,7 @@ def mealselector():
     date = datetime.date.today().strftime("%Y-%m-%d")
     eid = dbdata.get_eid_by_date(date)
     eid = eid[0][0]
-    try:
-        cts = dbdata.get_persess_by_id_and_eid(uid, eid)
-    except TypeError:
-        return redirect(url_for('register'))
+    cts = dbdata.get_persess_by_id_and_eid(uid, eid)
     meal_counts = cts[0][2:6]
     meal_counts = [count or 0 for count in meal_counts]
     vegetarian_ct, normal_ct, kid_vegetarian_ct, kid_normal_ct = meal_counts

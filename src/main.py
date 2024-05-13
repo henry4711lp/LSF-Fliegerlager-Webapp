@@ -27,7 +27,7 @@ users = {
 
 @app.route('/test')
 def test():
-    #vf_id = vf_data.get_vfid("jan", "sellerbeck")
+    vf_id = vf_data.get_vfid("jan", "sellerbeck")
     uid = get_uid_from_cookie()
     vf_id= vf_data.get_starts_by_date_and_id("2024-05-01", uid)
     resp = make_response(str(vf_id))
@@ -86,7 +86,10 @@ def home():
 
 @app.route("/stays")
 def stays():
-    uid = get_uid_from_cookie()
+    try:
+        uid = get_uid_from_cookie()
+    except TypeError:
+        return redirect(url_for('register'))
     vname = dbdata.get_vname_by_id(uid)
     nname = dbdata.get_nname_by_id(uid)
     counter = dbdata.get_stay_counter_by_id(uid)
@@ -96,7 +99,10 @@ def stays():
 
 @app.route("/bill")
 def bill():
-    return webwork.billing()
+    try:
+        return webwork.billing()
+    except TypeError:
+        return redirect(url_for('register'))
 
 
 @app.route("/get-cookies/UserID")
@@ -119,7 +125,10 @@ def get_vname_by_id():
 def drinkselector():
     uid = request.cookies.get("UserID")
     water_price = dbdata.get_gprice_by_id(str(1))
+    #try:
     water_ct = dbdata.get_persget_by_id_and_gid(uid, str(1))
+    #except IndexError:
+        #return redirect(url_for('register'))
     beer_price = dbdata.get_gprice_by_id(str(2))
     beer_ct = dbdata.get_persget_by_id_and_gid(uid, str(2))
     soft_price = dbdata.get_gprice_by_id(str(3))
@@ -137,12 +146,15 @@ def mealselector():
     date = datetime.date.today().strftime("%Y-%m-%d")
     eid = dbdata.get_eid_by_date(date)
     eid = eid[0][0]
-    cts = dbdata.get_persess_by_id_and_eid(uid, eid)
     try:
-        normal_ct = cts[0][2]
-        vegetarian_ct = cts[0][3]
-        kid_normal_ct = cts[0][4]
-        kid_vegetarian_ct = cts[0][5]
+        cts = dbdata.get_persess_by_id_and_eid(uid, eid)
+    except TypeError:
+        return redirect(url_for('register'))
+    try:
+        vegetarian_ct = cts[0][2]
+        normal_ct = cts[0][3]
+        kid_vegetarian_ct = cts[0][4]
+        kid_normal_ct = cts[0][5]
     except IndexError:
         normal_ct = 0
         vegetarian_ct = 0

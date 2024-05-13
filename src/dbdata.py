@@ -130,8 +130,14 @@ Args:
 Returns:
     The entry in the PERSGET table of the database associated with the input PID and GID.
 """
-    sql_statement = "SELECT CT FROM PERSGET WHERE ID = '" + str(pid) +"' AND GID = '" + str(gid) + "'"
-    return dbconnector.sql(sql_statement)[0][0]
+    try:
+        sql_statement = "SELECT CT FROM PERSGET WHERE ID = '" + str(pid) + "' AND GID = '" + str(gid) + "'"
+        sql_result = dbconnector.sql(sql_statement)[0][0]
+    except IndexError:
+        sql_statement = "INSERT INTO PERSGET VALUES ('" + str(pid) + "', '" + str(gid) + "', 0)"
+        dbconnector.sql(sql_statement)
+        sql_result = 0
+    return sql_result
 
 
 def get_gprice_by_id(gid):
@@ -388,8 +394,9 @@ def set_stay_start_end(uid, start, end):
     if not get_stay_start_end_by_id(uid):
         sql_statement = f"INSERT INTO STAY VALUES ({uid}, '{start}', '{end}', 0)"
         dbconnector.sql(sql_statement)
-    sql_statement = f"UPDATE STAY SET STAYDATE_START = '{start}', STAYDATE_END = '{end}' WHERE ID = {uid}"
-    dbconnector.sql(sql_statement)
+    else:
+        sql_statement = f"UPDATE STAY SET STAYDATE_START = '{start}', STAYDATE_END = '{end}' WHERE ID = {uid}"
+        dbconnector.sql(sql_statement)
 
 
 def set_user_id_by_name(vname, nname):
@@ -425,11 +432,11 @@ def set_eid_with_date():
 
 def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
     logging.debug(f"got drinklist: beer:{beer}, water:{water} icetea:{icetea} softdrinks:{softdrinks} uid: {uid}")
-    getraenke = [water, beer, icetea, softdrinks]
+    getraenke = [water, beer, softdrinks, icetea]
     for i in range(4):
         sql_statement = f"UPDATE `PERSGET` SET CT ='{getraenke[i]}' WHERE ID = '{uid}' AND GID = '{i + 1}' "
         dbconnector.sql(sql_statement)
-def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
+def set_meal_ct_by_id_and_uid(norm, veg, norm_kid, veg_kid, uid):
     logging.debug(f"got meal: vegetarian:{veg}, normal:{norm} vegetarian_kid:{veg_kid} normal_kid:{norm_kid} uid: {uid}")
     meals=[veg, norm, veg_kid, norm_kid]
     eid = get_eid_by_date(datetime.date.today().strftime("%Y-%m-%d"))
@@ -439,13 +446,13 @@ def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
         dbconnector.sql(sql_statement)
     else:
         logging.debug("Error while inserting into PERSESS table. Data already exists. Updating...")
-        sql_statement = f"UPDATE `PERSESS` SET CT_NORM ='{meals[0]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        sql_statement = f"UPDATE `PERSESS` SET CT_VEG ='{meals[0]}' WHERE ID = '{uid}' AND EID = '{eid}'"
         dbconnector.sql(sql_statement)
-        sql_statement = f"UPDATE `PERSESS` SET CT_VEG ='{meals[1]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        sql_statement = f"UPDATE `PERSESS` SET CT_NORM ='{meals[1]}' WHERE ID = '{uid}' AND EID = '{eid}'"
         dbconnector.sql(sql_statement)
-        sql_statement = f"UPDATE `PERSESS` SET CT_NORM_KID ='{meals[2]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        sql_statement = f"UPDATE `PERSESS` SET CT_VEG_KID ='{meals[2]}' WHERE ID = '{uid}' AND EID = '{eid}'"
         dbconnector.sql(sql_statement)
-        sql_statement = f"UPDATE `PERSESS` SET CT_VEG_KID ='{meals[3]}' WHERE ID = '{uid}' AND EID = '{eid}'"
+        sql_statement = f"UPDATE `PERSESS` SET CT_NORM_KID ='{meals[3]}' WHERE ID = '{uid}' AND EID = '{eid}'"
         dbconnector.sql(sql_statement)
 
 

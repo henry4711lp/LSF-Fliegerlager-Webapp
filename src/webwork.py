@@ -50,20 +50,22 @@ def stay(request):
     end = request.form["departure"]
     end = datetime.datetime.strptime(end, "%Y-%m-%d")
     delta = (end - start).days
+    if delta < 0:
+        return 'ERROR: Please enter a valid date range! \n You entered a departure date (' + str(end.strftime("%d.%m.%Y")) + ') before the arrival date ('+ str(start.strftime("%d.%m.%Y")) + '). \n Resulting in a negative stay duration (' + str(delta) + ' days). \n Please try again. <a href="/stays">Return</a>'
+    else:
+        # database updates
 
-    # database updates
+        dbdata.set_stay_start_end(uid, start, end)
+        dbdata.set_stay_counter(uid, delta)
 
-    dbdata.set_stay_start_end(uid, start, end)
-    dbdata.set_stay_counter(uid, delta)
+        # necessary data for home.html#
 
-    # necessary data for home.html#
-
-    vname = dbdata.get_vname_by_id(uid)
-    today = date.today().strftime("%d.%m.%Y")
-    str_uid = str(uid)
-    logging.debug(f"Start: {start}, End: {end} written to database generating response...")
-    resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
-    return resp
+        vname = dbdata.get_vname_by_id(uid)
+        today = date.today().strftime("%d.%m.%Y")
+        str_uid = str(uid)
+        logging.debug(f"Start: {start}, End: {end} written to database generating response...")
+        resp = make_response(render_template("home.html", ID=uid, date=today, display_name=vname, display_ID=str_uid))
+        return resp
 
 
 def drink(request):

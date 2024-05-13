@@ -9,7 +9,7 @@ import time
 class TestLoginForm(unittest.TestCase):
 
     def setUp(self):
-        self.server = subprocess.Popen(["python", "../src/main.py"], stdout=subprocess.PIPE)
+        self.server = subprocess.Popen(["../venv/Scripts/python", "../src/main.py"], stdout=subprocess.PIPE)
         time.sleep(1)  # Wait for the server to start
         self.driver = webdriver.Firefox()  # or webdriver.Chrome(), depending on your browser
         driver = self.driver

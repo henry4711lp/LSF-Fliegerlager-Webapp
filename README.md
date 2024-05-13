@@ -1,4 +1,4 @@
-[![Deploy to Portainer with Self-Hosted Runner](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/Docker-Build.yml/badge.svg)](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/Docker-Build.yml) ![Security Test](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/codeql-analysis.yml/badge.svg) ![Deployment](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/Docker-Build.yml/badge.svg) ![Sonarqube](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/sonarqube-scanner.yml/badge.svg) ![Tests](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/test_on_push.yml/badge.svg)
+[![Deploy to Portainer with Self-Hosted Runner](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/Docker-Build.yml/badge.svg)](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/Docker-Build.yml) ![Deployment](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/Docker-Build.yml/badge.svg) ![Sonarqube](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/sonarqube-scanner.yml/badge.svg) ![Tests](https://github.com/henry4711lp/LSF-Fliegerlager-Webapp/actions/workflows/test_on_push.yml/badge.svg)
 # LSF-Fliegerlager-Webapp
 
 This app is to replace a handwritten list for "bought" drinks, dinners and accomodation days.  
@@ -11,6 +11,7 @@ Latest Main Branch running on: https://lsf-flilaapp.sellerbeckcloud.de/
 
 - [Jan Sellerbeck](https://www.github.com/henry4711lp)
 - [Robin Busch](https://www.github.com/rbn-de)
+- ### HELP WANTED ***REDESIGN FRONTEND***
 
 
 ## Data Privacy
@@ -96,4 +97,5 @@ https://readme.so/de/editor
 #### How can I contribute?
 
 Text us!
+##### HELP WANTED ***REDESIGN FRONTEND***
 

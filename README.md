@@ -28,7 +28,7 @@ Latest Main Branch running on: https://lsf-flilaapp.sellerbeckcloud.de/
 - [X]  export function implemented
 - [X]  Design created
 - [X]  drink function implemented
-- [ ]  Dinner function implemented
+- [X]  Dinner function implemented
 - [X]  Day function implemented
 - [ ]  Open issues closed
 ------------------------------------
@@ -36,24 +36,27 @@ Latest Main Branch running on: https://lsf-flilaapp.sellerbeckcloud.de/
 ------------------------------------
 - [ ] UI user tests
 - [ ] Data Privacy inspection
+- [ ] Bugfixes
+- [ ] Code review
+- [ ] Documentation
+- [ ] Open issues closed
+- [ ] Relief stress on API calls --> new DB design pulling data from VF API and storing
 ------------------------------------
 - [ ] **V0.1 Beta release**
 ------------------------------------
 
 ## Tech Stack
 
-**Client:** Android Browser, HTML, CSS, JavaScript
+**Client:** Android Browser, HTML5, CSS3, JavaScript (ES6)
 
-**Server:** mySQL, phpMyAdmin, Python, Docker
+**Server:** MySQL, phpMyAdmin, Python 3.9, Docker
 
-**Python:** Flask, mysql, mysql-connector-python, PyYAML, requests, tabulate, setuptools, getConfig, Werkzeug,
-            flask_httpauth, XlsxWriter, APScheduler
+**Python Libraries:** Flask, mysql-connector-python, PyYAML, requests, tabulate, setuptools, getConfig, Werkzeug, flask_httpauth, XlsxWriter, APScheduler
 
-**CI/CD:** Github Actions, Sonarqube, Docker, Docker-Compose, Quodana, CodeQL, Ubuntu, Github Runner
-
+**CI/CD:** Github Actions, Sonarqube, Docker, Docker-Compose, Quodana, CodeQL, Ubuntu 20.04, Github Runner
 
 
-## Run Locally
+## Run Locally for Development
 -  Clone the project
 -  Install the requirements
 -  Install XAMPP or another mysql server and add it to the config file
@@ -63,6 +66,15 @@ Latest Main Branch running on: https://lsf-flilaapp.sellerbeckcloud.de/
 -  Create a database and add it to the config file
 -  Import the tables from the sql file
 -  Run the main.py
+
+## Run for Production
+-  deploy a mysql server
+-  run the sample database creation script
+-  pull and run the docker image with these commands:
+```bash
+  docker pull henry4711lp/lsf-fliegerlager-webapp:latest
+  docker run -d -p 5000:5000 -v ${YOUR_CONFIG_PATH}:/config/config.yaml --restart unless-stopped henry4711lp/lsf-fliegerlager-webapp:latest
+```
 
 ## Screenshots
 ![login_page.png](Screenshots%2Flogin_page.png)

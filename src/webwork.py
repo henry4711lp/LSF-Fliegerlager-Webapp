@@ -9,7 +9,7 @@ import dbdata
 import formatprices
 import main
 import tablegenerator
-from src import vf_data
+import vf_data
 
 
 def signup_in(request):

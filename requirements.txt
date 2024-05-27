@@ -10,5 +10,5 @@ Werkzeug>=3.0.1
 XlsxWriter~=3.0.9
 APScheduler~=3.9.1.post1
 mysqlx ~= 2.2.0
-
+Flask-HTTPAuth == 4.8.0
 selenium~=4.20.0

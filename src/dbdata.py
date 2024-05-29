@@ -13,7 +13,6 @@ import vf_data
 
 
 def get_all_data_of_uid():
-
     return dbconnector.sql("SELECT * FROM ID;")
 
 
@@ -443,6 +442,7 @@ def set_user_id_by_name(vname, nname):
     dbconnector.sql(sql_statement)
     return uid
 
+
 def set_eid_with_date():
     """
         This function inserts a new event into the 'ESS' table in the database with a new EID, the current date, and the meal cost.
@@ -458,6 +458,7 @@ def set_eid_with_date():
     date = datetime.date.today().strftime("%Y-%m-%d")
     sql_statement = f"INSERT INTO ESS VALUES ({max_eid}, {meal_cost}, '{date}')"  ## Null is for auto increment of the ID
     dbconnector.sql(sql_statement)
+
 
 def set_drink_ct_by_id_and_uid(beer, water, icetea, softdrinks, uid):
     """
@@ -521,3 +522,31 @@ def set_meal_ct_by_id_and_uid(veg, norm, veg_kid, norm_kid, uid):
         dbconnector.sql(sql_statement)
         sql_statement = f"UPDATE `PERSESS` SET CT_VEG_KID ='{meals[3]}' WHERE ID = '{uid}' AND EID = '{eid}'"
         dbconnector.sql(sql_statement)
+
+
+def close_meal_today():
+    """
+    This function closes the meal for today by setting the EID of the user to 0 in the 'PERSESS' table in the database.
+
+    The function does not take any arguments and does not return any value. It directly interacts with the database to perform the update operation.
+    """
+    date = datetime.date.today()
+    tomorrow = date + datetime.timedelta(days=1)
+    tomorrow = tomorrow.strftime("%Y-%m-%d")
+    date = date.strftime("%Y-%m-%d")
+    eid = get_eid_by_date(date)
+    eid = int(json.loads(json.dumps(eid))[0][0])
+    sql_statement = f"INSERT INTO `ESS` (EID, EDAT, is_latest) VALUES ({eid + 1},{tomorrow}, TRUE)"
+    dbconnector.sql(sql_statement)
+    logging.debug("Closed meal for today")
+
+def get_meal_date():
+    """
+    This function returns the date of the meal for today.
+
+    The function does not take any arguments and returns the date of the meal for today.
+    """
+
+    sql_statement = f"SELECT EDAT FROM ESS WHERE isLatest = TRUE"
+    date = dbconnector.sql(sql_statement)
+    date = json.loads(json.dumps(date)[0][0])

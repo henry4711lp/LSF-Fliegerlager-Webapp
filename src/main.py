@@ -14,26 +14,36 @@ import getConfig
 import webwork
 import dbexport
 import vf_data
+
 # create flask app
 app = Flask(__name__, static_url_path='/static')
 UserID = 0
 httpAuth = HTTPBasicAuth()
 user = getConfig.get_config("admin_username")
 pw = getConfig.get_config("admin_password")
-users = {
-    user: generate_password_hash(pw)
-}
+#users = {
+#    user: generate_password_hash(pw)
+#}
 
 
 @app.route('/test')
 def test():
     vf_id = vf_data.get_vfid("jan", "sellerbeck")
     uid = get_uid_from_cookie()
-    vf_id= vf_data.get_starts_by_date_and_id("2024-05-01", uid)
+    vf_id = vf_data.get_starts_by_date_and_id("2024-05-01", uid)
     resp = make_response(str(vf_id))
     return resp
 
 
+@httpAuth.verify_password
+@app.route('/close_meal_today')
+def close_meal_today():
+    dbdata.close_meal_today()
+    return "Success"
+
+@app.route('/get_meal_today')
+def get_meal_today():
+    return dbdata.get_meal_date()
 @httpAuth.verify_password
 def verify_password(username, password):
     if username in users:
@@ -166,15 +176,14 @@ def mealselector():
     meal_counts = [count or 0 for count in meal_counts]
     vegetarian_ct, normal_ct, kid_vegetarian_ct, kid_normal_ct = meal_counts
     prices = float(getConfig.get_config("meal_cost"))
-    kid_price = prices/2
+    kid_price = prices / 2
     prices = f"{prices}0 €"
     kid_price = f"{kid_price} €"
     mealdate = datetime.date.today().strftime("%d.%m.%Y")
     return render_template("mealselector.html", mealdate=mealdate, normal_price=prices, vegetarian_price=prices,
-                           kid_normal_price=kid_price, kid_vegetarian_price=kid_price, normal_ct=normal_ct, vegetarian_ct=vegetarian_ct,
+                           kid_normal_price=kid_price, kid_vegetarian_price=kid_price, normal_ct=normal_ct,
+                           vegetarian_ct=vegetarian_ct,
                            kid_normal_ct=kid_normal_ct, kid_vegetarian_ct=kid_vegetarian_ct)
-
-
 
 
 @app.route("/dbtest")
@@ -200,4 +209,4 @@ if __name__ == '__main__':
     sched.add_job(dbexport.export, 'interval', minutes=60)
     sched.start()
     logging.basicConfig(level=logging.DEBUG)
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True, host="0.0.0.0", port=5001)

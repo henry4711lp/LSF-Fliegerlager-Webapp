@@ -54,7 +54,7 @@ Latest Main Branch running on: https://lsf-flilaapp.sellerbeckcloud.de/
 
 **Python Libraries:** Flask, mysql-connector-python, PyYAML, requests, tabulate, setuptools, getConfig, Werkzeug, flask_httpauth, XlsxWriter, APScheduler
 
-**CI/CD:** Github Actions, Sonarqube, Docker, Docker-Compose, Quodana, CodeQL, Ubuntu 20.04, Github Runner
+**CI/CD:** Github Actions, Sonarqube, Docker, Docker-Compose, Quodana, CodeQL, Ubuntu 20.04, Github Runner, Portainer
 
 
 ## Run Locally for Development

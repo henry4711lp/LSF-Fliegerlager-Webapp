@@ -25,6 +25,7 @@ jobs:
         pip install -e .
     - name: Install config
       run: |
+        source venv/bin/activate
         cp config/config.yaml.example config/config.yaml
     - name: Run tests
       run: |

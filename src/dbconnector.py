@@ -2,7 +2,7 @@ import logging
 import mysql.connector
 from mysqlx.helpers import escape
 
-import getConfig
+import src.getConfig as getConfig
 
 
 logging.basicConfig(level=logging.DEBUG)

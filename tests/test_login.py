@@ -8,14 +8,16 @@ import time
 
 from src import getConfig
 
-class TestLoginForm(unittest.TestCase):
+
+class FrontendTests(unittest.TestCase):
 
     def setUp(self):
         self.server = subprocess.Popen(["../venv/bin/python", "../src/main.py"], stdout=subprocess.PIPE)
         time.sleep(1)  # Wait for the server to start
         self.driver = webdriver.Firefox()  # or webdriver.Chrome(), depending on your browser
         driver = self.driver
-        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/register')  # replace with the URL of your login page
+        driver.get(
+            f'http://localhost:{getConfig.get_config("application_port")}/register')  # replace with the URL of your login page
 
         # Find the form elements
         firstname_input = driver.find_element(By.NAME, 'vname')
@@ -37,15 +39,16 @@ class TestLoginForm(unittest.TestCase):
         user_name = user_id[2]
         user_id = user_id[4]
         self.assertIsNotNone(user_id)
-        self.assertEqual(user_id, '1')
+        self.assertEqual(user_id, '52')
         self.assertEqual(user_name, 'test')
         cookie = self.driver.get_cookie('UserID')
         self.assertIsNotNone(cookie)
-        self.assertEqual(cookie['value'], '1')
+        self.assertEqual(cookie['value'], '52')
 
     def test_meal_selector_page_minus(self):
         driver = self.driver
-        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
+        driver.get(
+            f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
         time.sleep(3)
         kid_vegetarian_counter = driver.find_element(By.XPATH,
                                                      '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
@@ -85,7 +88,8 @@ class TestLoginForm(unittest.TestCase):
         confirm_button.click()
         time.sleep(6)
         self.assertEqual(driver.current_url, f'http://localhost:{getConfig.get_config("application_port")}/home')
-        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
+        driver.get(
+            f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
         time.sleep(2)
         kid_vegetarian_counter_after_plus = driver.find_element(By.XPATH,
                                                                 '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
@@ -102,7 +106,8 @@ class TestLoginForm(unittest.TestCase):
 
     def test_meal_selector_page_plus(self):
         driver = self.driver
-        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
+        driver.get(
+            f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
         time.sleep(2)
         kid_vegetarian_counter = driver.find_element(By.XPATH,
                                                      '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
@@ -168,9 +173,9 @@ class TestLoginForm(unittest.TestCase):
 
 def suite():
     suite_var = unittest.TestSuite()
-    suite_var.addTest(TestLoginForm('test_login_form'))
-    suite_var.addTest(TestLoginForm('test_meal_selector_page_plus'))
-    suite_var.addTest(TestLoginForm('test_meal_selector_page_minus'))
+    suite_var.addTest(FrontendTests('test_login_form'))
+    suite_var.addTest(FrontendTests('test_meal_selector_page_plus'))
+    suite_var.addTest(FrontendTests('test_meal_selector_page_minus'))
     return suite_var
 
 

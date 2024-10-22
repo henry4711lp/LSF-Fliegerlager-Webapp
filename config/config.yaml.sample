@@ -3,6 +3,7 @@ api_token: "your_api_token"
 api_username: "your_username"
 api_cid: "your_cid"
 api_password: "your_password"
+api_disable: "false" # set to true if you don't want to use the Vereinsflieger API
 db_host: "your_db_host"
 db_port: "your_db_port"
 db_user: "your_db_user"
@@ -20,3 +21,4 @@ mail_password: "your_mail_password"
 mail_sender: "your_mail_sender"
 mail_recipient: "your_mail_recipient" # add recipients separated by comma
 mail_tls: "True"
+application_port: "5000"

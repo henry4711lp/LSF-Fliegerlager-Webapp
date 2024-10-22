@@ -6,14 +6,16 @@ from selenium.webdriver.common.by import By
 import unittest
 import time
 
+from src import getConfig
+
 class TestLoginForm(unittest.TestCase):
 
     def setUp(self):
-        self.server = subprocess.Popen(["../venv/Scripts/python", "../src/main.py"], stdout=subprocess.PIPE)
+        self.server = subprocess.Popen(["../venv/bin/python", "../src/main.py"], stdout=subprocess.PIPE)
         time.sleep(1)  # Wait for the server to start
         self.driver = webdriver.Firefox()  # or webdriver.Chrome(), depending on your browser
         driver = self.driver
-        driver.get('http://localhost:5000/register')  # replace with the URL of your login page
+        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/register')  # replace with the URL of your login page
 
         # Find the form elements
         firstname_input = driver.find_element(By.NAME, 'vname')
@@ -41,27 +43,26 @@ class TestLoginForm(unittest.TestCase):
         self.assertIsNotNone(cookie)
         self.assertEqual(cookie['value'], '1')
 
-
     def test_meal_selector_page_minus(self):
         driver = self.driver
-        driver.get('http://localhost:5000/mealselector')  # replace with the URL of your meal selector page
+        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
         time.sleep(3)
         kid_vegetarian_counter = driver.find_element(By.XPATH,
-                                                         '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                     '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
         normal_counter = driver.find_element(By.XPATH,
-                                                 '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
+                                             '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
         vegetarian_counter = driver.find_element(By.XPATH,
-                                                     '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                 '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
         kid_normal_counter = driver.find_element(By.XPATH,
-                                                     '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
+                                                 '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
         kid_vegetarian_plus_button = driver.find_element(By.XPATH,
                                                          '//div[@id="kid_vegetarian_ct"]//button[contains(@class, "minus")]')
         normal_plus_button = driver.find_element(By.XPATH,
-                                                      '//div[@id="normal_ct"]//button[contains(@class, "minus")]')
+                                                 '//div[@id="normal_ct"]//button[contains(@class, "minus")]')
         vegetarian_plus_button = driver.find_element(By.XPATH,
-                                                          '//div[@id="vegetarian_ct"]//button[contains(@class, "minus")]')
+                                                     '//div[@id="vegetarian_ct"]//button[contains(@class, "minus")]')
         kid_normal_plus_button = driver.find_element(By.XPATH,
-                                                          '//div[@id="kid_normal_ct"]//button[contains(@class, "minus")]')
+                                                     '//div[@id="kid_normal_ct"]//button[contains(@class, "minus")]')
         # Find the form elements
         normal_rand = random.randrange(1, 4)
         kid_vegetarian_rand = random.randrange(1, 4)
@@ -83,43 +84,42 @@ class TestLoginForm(unittest.TestCase):
         self.assertIsNotNone(confirm_button)
         confirm_button.click()
         time.sleep(6)
-        self.assertEqual(driver.current_url, 'http://localhost:5000/home')
-        driver.get('http://localhost:5000/mealselector')  # replace with the URL of your meal selector page
+        self.assertEqual(driver.current_url, f'http://localhost:{getConfig.get_config("application_port")}/home')
+        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
         time.sleep(2)
         kid_vegetarian_counter_after_plus = driver.find_element(By.XPATH,
-                                                         '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                                '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
         normal_counter_after_plus = driver.find_element(By.XPATH,
-                                                 '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
+                                                        '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
         vegetarian_counter_after_plus = driver.find_element(By.XPATH,
-                                                     '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                            '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
         kid_normal_counter_after_plus = driver.find_element(By.XPATH,
-                                                     '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
+                                                            '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
         self.assertEqual(int(kid_vegetarian_counter_after_plus.text), int(kid_vegetarian_counter))
         self.assertEqual(int(normal_counter_after_plus.text), int(normal_counter))
         self.assertEqual(int(vegetarian_counter_after_plus.text), int(vegetarian_counter))
         self.assertEqual(int(kid_normal_counter_after_plus.text), int(kid_normal_counter))
 
-
     def test_meal_selector_page_plus(self):
         driver = self.driver
-        driver.get('http://localhost:5000/mealselector')  # replace with the URL of your meal selector page
+        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/mealselector')  # replace with the URL of your meal selector page
         time.sleep(2)
         kid_vegetarian_counter = driver.find_element(By.XPATH,
-                                                         '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                     '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
         normal_counter = driver.find_element(By.XPATH,
-                                                 '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
+                                             '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
         vegetarian_counter = driver.find_element(By.XPATH,
-                                                     '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                 '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
         kid_normal_counter = driver.find_element(By.XPATH,
-                                                     '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
+                                                 '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
         kid_vegetarian_plus_button = driver.find_element(By.XPATH,
                                                          '//div[@id="kid_vegetarian_ct"]//button[contains(@class, "plus")]')
         normal_plus_button = driver.find_element(By.XPATH,
-                                                      '//div[@id="normal_ct"]//button[contains(@class, "plus")]')
+                                                 '//div[@id="normal_ct"]//button[contains(@class, "plus")]')
         vegetarian_plus_button = driver.find_element(By.XPATH,
-                                                          '//div[@id="vegetarian_ct"]//button[contains(@class, "plus")]')
+                                                     '//div[@id="vegetarian_ct"]//button[contains(@class, "plus")]')
         kid_normal_plus_button = driver.find_element(By.XPATH,
-                                                          '//div[@id="kid_normal_ct"]//button[contains(@class, "plus")]')
+                                                     '//div[@id="kid_normal_ct"]//button[contains(@class, "plus")]')
         # Find the form elements
         normal_rand = random.randrange(4, 10)
         kid_vegetarian_rand = random.randrange(4, 10)
@@ -143,26 +143,28 @@ class TestLoginForm(unittest.TestCase):
         self.assertIsNotNone(confirm_button)
         confirm_button.click()
         time.sleep(6)
-        self.assertEqual(driver.current_url, 'http://localhost:5000/home')
-        driver.get('http://localhost:5000/mealselector')
+        self.assertEqual(driver.current_url, f'http://localhost:{getConfig.get_config("application_port")}/home')
+        driver.get(f'http://localhost:{getConfig.get_config("application_port")}/mealselector')
         time.sleep(2)
         kid_vegetarian_counter_after_plus = driver.find_element(By.XPATH,
-                                                         '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                                '//div[@id="kid_vegetarian_ct"]//div[contains(@class, "amount")]')
         normal_counter_after_plus = driver.find_element(By.XPATH,
-                                                 '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
+                                                        '//div[@id="normal_ct"]//div[contains(@class, "amount")]')
         vegetarian_counter_after_plus = driver.find_element(By.XPATH,
-                                                     '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
+                                                            '//div[@id="vegetarian_ct"]//div[contains(@class, "amount")]')
         kid_normal_counter_after_plus = driver.find_element(By.XPATH,
-                                                     '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
+                                                            '//div[@id="kid_normal_ct"]//div[contains(@class, "amount")]')
         self.assertEqual(int(kid_vegetarian_counter_after_plus.text), int(kid_vegetarian_counter))
         self.assertEqual(int(normal_counter_after_plus.text), int(normal_counter))
         self.assertEqual(int(vegetarian_counter_after_plus.text), int(vegetarian_counter))
         self.assertEqual(int(kid_normal_counter_after_plus.text), int(kid_normal_counter))
+
     def tearDown(self):
         self.driver.close()
         self.server.terminate()
         self.server.kill()
         self.driver.quit()
+
 
 def suite():
     suite_var = unittest.TestSuite()
@@ -170,6 +172,7 @@ def suite():
     suite_var.addTest(TestLoginForm('test_meal_selector_page_plus'))
     suite_var.addTest(TestLoginForm('test_meal_selector_page_minus'))
     return suite_var
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner()

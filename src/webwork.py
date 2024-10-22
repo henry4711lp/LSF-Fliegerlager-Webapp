@@ -124,7 +124,10 @@ def billing():
     except AttributeError:
         enddate = datetime.datetime.today().strftime("%d.%m.%Y")
         logging.info("No enddate found")
-    startstable = tablegenerator.get_table(vf_data.get_starts_by_multiple_dates_and_id(startdate, enddate, uid))  # placeholder
+    try:
+        startstable = tablegenerator.get_table(vf_data.get_starts_by_multiple_dates_and_id(startdate, enddate, uid))  # placeholder
+    except ConnectionError:
+        startstable = None
     flycost = formatprices.format_prices(0)  # placeholder
     full_price = dbdata.get_sum_of_drinks_by_id(uid) + dbdata.get_sum_of_meals_by_id(uid) + dbdata.get_staycost_by_id(
         uid)

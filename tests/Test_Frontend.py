@@ -9,7 +9,7 @@ import time
 from src import getConfig
 
 
-class FrontendTests(unittest.TestCase):
+class TestFrontend(unittest.TestCase):
 
     def setUp(self):
         self.server = subprocess.Popen(["../venv/bin/python", "../src/main.py"], stdout=subprocess.PIPE)
@@ -173,9 +173,9 @@ class FrontendTests(unittest.TestCase):
 
 def suite():
     suite_var = unittest.TestSuite()
-    suite_var.addTest(FrontendTests('test_login_form'))
-    suite_var.addTest(FrontendTests('test_meal_selector_page_plus'))
-    suite_var.addTest(FrontendTests('test_meal_selector_page_minus'))
+    suite_var.addTest(TestFrontend('test_login_form'))
+    suite_var.addTest(TestFrontend('test_meal_selector_page_plus'))
+    suite_var.addTest(TestFrontend('test_meal_selector_page_minus'))
     return suite_var
 
 

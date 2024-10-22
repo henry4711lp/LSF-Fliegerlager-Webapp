@@ -1,4 +1,3 @@
-
 import unittest
 import os
 from unittest.mock import patch, mock_open
@@ -10,7 +9,7 @@ class TestGetConfig(unittest.TestCase):
 
     @patch("builtins.open", new_callable=mock_open, read_data="db_user: test_user\ndb_password: test_password")
     @patch("os.path.abspath", return_value="../config/config.yaml")
-    def test_get_config(self, mock_file):
+    def test_get_config(self, mock_abspath, mock_file):
         # Test for existing key
         result = getConfig.get_config("db_user")
         self.assertEqual(result, "test_user")

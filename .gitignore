@@ -136,3 +136,5 @@ config/config.yaml
 #excel
 /src/send/
 *.xlsx
+
+*.DS_Store

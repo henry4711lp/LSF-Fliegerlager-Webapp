@@ -12,7 +12,7 @@ setup(
     long_description_content_type="text/markdown",
     author='henry4711lp',
     url='',
-    packages=find_packages('src'),
+    packages=find_packages(where='src'),
     package_dir={
         'src': 'src'},
     include_package_data=True,

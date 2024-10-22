@@ -1,18 +1,22 @@
+import os
 import subprocess
 import random
+import sys
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import unittest
 import time
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 from src import getConfig
 
 
 class TestFrontend(unittest.TestCase):
 
     def setUp(self):
-        self.server = subprocess.Popen(["../venv/bin/python", "../src/main.py"], stdout=subprocess.PIPE)
+        config_path = os.path.join(os.path.dirname(__file__), "../src/main.py")
+        self.server = subprocess.Popen(["python", config_path], stdout=subprocess.PIPE)
         time.sleep(1)  # Wait for the server to start
         self.driver = webdriver.Firefox()  # or webdriver.Chrome(), depending on your browser
         driver = self.driver

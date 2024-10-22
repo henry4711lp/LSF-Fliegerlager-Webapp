@@ -5,8 +5,8 @@ import sys
 import mysql.connector
 from mysqlx.helpers import escape
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-import src.getConfig as getConfig
+#sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+import getConfig
 
 logging.basicConfig(level=logging.DEBUG)
 

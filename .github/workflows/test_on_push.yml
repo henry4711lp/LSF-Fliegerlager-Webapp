@@ -26,4 +26,4 @@ jobs:
     - name: Run tests
       run: |
         source venv/bin/activate
-        coverage -m unittest discover -s tests -p "*.py"
+        coverage run -m unittest discover -s tests -p "*.py"

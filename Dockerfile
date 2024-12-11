@@ -1,8 +1,10 @@
 # Verwenden Sie ein offizielles Python-Basisimage
-FROM python:3.8
+FROM python:3.8-alpine
 
 # Arbeitsverzeichnis im Container festlegen
 WORKDIR /app
+
+COPY . .
 
 # Kopieren der Abhängigkeiten-Datei
 COPY requirements.txt .

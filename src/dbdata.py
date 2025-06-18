@@ -547,6 +547,7 @@ def get_meal_date():
     The function does not take any arguments and returns the date of the meal for today.
     """
 
-    sql_statement = f"SELECT EDAT FROM ESS WHERE isLatest = TRUE"
+    sql_statement = f"SELECT EDAT FROM ESS WHERE is_latest = TRUE"
     date = dbconnector.sql(sql_statement)
-    date = json.loads(json.dumps(date)[0][0])
+    date = json.loads(json.dumps(date))[0][0]
+    return date

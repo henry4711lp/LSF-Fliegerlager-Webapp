@@ -1,0 +1,37 @@
+digraph "packages_code_structure" {
+rankdir=BT
+charset="utf-8"
+"src" [color="black", label=<src>, shape="box", style="solid"];
+"src.dbconnector" [color="black", label=<src.dbconnector>, shape="box", style="solid"];
+"src.dbdata" [color="black", label=<src.dbdata>, shape="box", style="solid"];
+"src.dbexport" [color="black", label=<src.dbexport>, shape="box", style="solid"];
+"src.formatprices" [color="black", label=<src.formatprices>, shape="box", style="solid"];
+"src.getConfig" [color="black", label=<src.getConfig>, shape="box", style="solid"];
+"src.main" [color="black", label=<src.main>, shape="box", style="solid"];
+"src.sendExport" [color="black", label=<src.sendExport>, shape="box", style="solid"];
+"src.tablegenerator" [color="black", label=<src.tablegenerator>, shape="box", style="solid"];
+"src.vf_data" [color="black", label=<src.vf_data>, shape="box", style="solid"];
+"src.webwork" [color="black", label=<src.webwork>, shape="box", style="solid"];
+"src.dbconnector" -> "src.getConfig" [arrowhead="open", arrowtail="none"];
+"src.dbdata" -> "src.dbconnector" [arrowhead="open", arrowtail="none"];
+"src.dbdata" -> "src.formatprices" [arrowhead="open", arrowtail="none"];
+"src.dbdata" -> "src.getConfig" [arrowhead="open", arrowtail="none"];
+"src.dbdata" -> "src.vf_data" [arrowhead="open", arrowtail="none"];
+"src.dbexport" -> "src.dbdata" [arrowhead="open", arrowtail="none"];
+"src.dbexport" -> "src.getConfig" [arrowhead="open", arrowtail="none"];
+"src.dbexport" -> "src.sendExport" [arrowhead="open", arrowtail="none"];
+"src.main" -> "src.dbconnector" [arrowhead="open", arrowtail="none"];
+"src.main" -> "src.dbdata" [arrowhead="open", arrowtail="none"];
+"src.main" -> "src.dbexport" [arrowhead="open", arrowtail="none"];
+"src.main" -> "src.getConfig" [arrowhead="open", arrowtail="none"];
+"src.main" -> "src.vf_data" [arrowhead="open", arrowtail="none"];
+"src.main" -> "src.webwork" [arrowhead="open", arrowtail="none"];
+"src.sendExport" -> "src.getConfig" [arrowhead="open", arrowtail="none"];
+"src.vf_data" -> "src.dbdata" [arrowhead="open", arrowtail="none"];
+"src.vf_data" -> "src.getConfig" [arrowhead="open", arrowtail="none"];
+"src.webwork" -> "src.dbdata" [arrowhead="open", arrowtail="none"];
+"src.webwork" -> "src.formatprices" [arrowhead="open", arrowtail="none"];
+"src.webwork" -> "src.main" [arrowhead="open", arrowtail="none"];
+"src.webwork" -> "src.tablegenerator" [arrowhead="open", arrowtail="none"];
+"src.webwork" -> "src.vf_data" [arrowhead="open", arrowtail="none"];
+}

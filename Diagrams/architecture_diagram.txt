@@ -1,0 +1,7 @@
+main.py -> webwork.py -> dbdata.py -> dbconnector.py
+           |              |
+           |              -> vf_data.py
+           |              -> getConfig.py
+           |
+           -> tablegenerator.py
+           -> dbexport.py -> sendExport.py

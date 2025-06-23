@@ -87,6 +87,21 @@ Latest Main Branch running on: https://lsf-flilaapp.sellerbeckcloud.de/
 ## Database Design
 ![database_design.png](Screenshots%2Fdatabase_design.png)
 
+## Architecture Diagrams
+The `Diagrams/` folder now contains text diagrams describing the module
+relationships. You can render `packages_code_structure.dot` with Graphviz, or
+view the simplified ASCII overview below:
+
+```
+main.py -> webwork.py -> dbdata.py -> dbconnector.py
+           |              |
+           |              -> vf_data.py
+           |              -> getConfig.py
+           |
+           -> tablegenerator.py
+           -> dbexport.py -> sendExport.py
+```
+
 
 ## FAQ
 

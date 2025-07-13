@@ -13,3 +13,5 @@ mysqlx ~= 2.2.0
 Flask-HTTPAuth == 4.8.0
 selenium~=4.20.0
 coverage~=6.0.0
+protobuf>=4.25.8 # not directly required, pinned by Snyk to avoid a vulnerability
+urllib3>=2.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
